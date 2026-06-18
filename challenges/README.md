@@ -2,7 +2,7 @@
 
 | # | Challenge | Status | Live URL |
 |---|-----------|--------|----------|
-| 01 | [Insurance Plan Comparison Page](./challenge-01-plan-comparison/) | In progress | — |
+| 01 | [Insurance Plan Comparison Page](./challenge-01-plan-comparison/) | Complete | [challenge-01-plan-comparison.vercel.app](https://challenge-01-plan-comparison.vercel.app) |
 | 02 | [TBD](../docs/AI_Challenge_02.md) | Not started | — |
 | 03 | [TBD](../docs/AI_Challenge_03.md) | Not started | — |
 | 04 | [TBD](../docs/AI_Challenge_04.md) | Not started | — |
