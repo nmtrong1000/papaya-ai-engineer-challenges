@@ -1,4 +1,13 @@
+import { BenefitType } from '../data/plans'
 import type { Plan } from '../data/plans'
+import { formatBenefit } from '../utils/formatBenefit'
+
+const BENEFIT_LABELS: Record<BenefitType, string> = {
+  [BenefitType.Outpatient]: 'Outpatient',
+  [BenefitType.Inpatient]: 'Inpatient',
+  [BenefitType.Dental]: 'Dental',
+  [BenefitType.Maternity]: 'Maternity',
+}
 
 type Props = {
   plan: Plan
@@ -38,6 +47,17 @@ export function PlanCard({ plan }: Props) {
           </dd>
         </div>
       </dl>
+
+      <hr className="my-4 border-gray-100" />
+
+      <div className="space-y-3 text-sm">
+        {(Object.values(BenefitType) as BenefitType[]).map((type) => (
+          <div key={type}>
+            <p className="text-gray-500 mb-1">{BENEFIT_LABELS[type]}</p>
+            <div className="font-medium">{formatBenefit(plan.benefits[type], type)}</div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
