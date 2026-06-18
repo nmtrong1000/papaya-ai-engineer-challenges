@@ -358,22 +358,22 @@ All commits in this loop land on the `challenge-XX` branch.
 3. Agent commits on challenge-XX: "chore: [TICKET-ID] start — [Task Name]"
 4. Agent executes the steps in order, checking off each as it goes
 5. Agent runs the "How to Test" steps and confirms expected result
-5a. Agent runs the quality gate — ALL three must pass before proceeding:
-    - `npm run build`  → no build errors
-    - `npm run test`   → no test failures (skip if no tests exist yet)
-    - `npm run lint`   → no linting or formatting issues
-    If any check fails, fix it and re-run before moving on.
-6. Agent stops and asks: "[TICKET-ID] — [Task Name] complete. Please review
+6. Agent runs the quality gate — ALL three must pass before proceeding:
+   - `npm run build`  → no build errors
+   - `npm run test`   → no test failures (skip if no tests exist yet)
+   - `npm run lint`   → no linting or formatting issues
+   If any check fails, fix it and re-run before moving on.
+7. Agent stops and asks: "[TICKET-ID] — [Task Name] complete. Please review
    the output. Reply 'ok' to log time and move to the next task, or describe
    what to fix."
 
    *** STOP. Do not proceed past this point until the user replies 'ok'. ***
    *** Do NOT log Time Out or commit until 'ok' is received.             ***
 
-7. (After user 'ok') Agent logs Time Out (fills the "Out:" field in the task file)
-8. (After user 'ok') Agent commits on challenge-XX: "feat: [TICKET-ID] done — [Task Name]"
+8. (After user 'ok') Agent logs Time Out (fills the "Out:" field in the task file)
+9. (After user 'ok') Agent commits on challenge-XX: "feat: [TICKET-ID] done — [Task Name]"
    (use fix: or chore: instead of feat: where appropriate per the conventions table)
-9. Move to the next task
+10. Move to the next task
 ```
 
 ### Commit conventions
