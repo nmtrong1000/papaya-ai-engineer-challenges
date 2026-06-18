@@ -1,5 +1,12 @@
+import { plans } from './data/plans'
+import { ComparisonTable } from './components/ComparisonTable'
+
 function App() {
-  return <h1 className="text-2xl font-bold p-6">Hello</h1>
+  return (
+    <div className="bg-gray-50 min-h-screen p-6">
+      <ComparisonTable plans={plans} />
+    </div>
+  )
 }
 
 export default App
