@@ -1,0 +1,22 @@
+# Dependencies
+**/node_modules/
+
+# Build output
+**/dist/
+**/.next/
+
+# Environment
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Claude local settings (machine-specific, never commit)
+.claude/settings.local.json
+
+# OS
+**/.DS_Store
+**/Thumbs.db
+
+# Editor
+**/.vscode/
+**/.idea/
