@@ -5,6 +5,9 @@
 **/dist/
 **/.next/
 
+# Vite dev cache
+**/.vite/
+
 # Environment
 **/.env
 **/.env.local
