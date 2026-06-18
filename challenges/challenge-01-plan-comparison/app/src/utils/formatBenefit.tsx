@@ -5,7 +5,9 @@ const fmt = (n: number) => n === -1 ? 'Unlimited' : n.toLocaleString()
 
 const notIncluded = (
   <span className="flex items-center gap-1 text-gray-400">
-    <span aria-hidden="true">✕</span>
+    <svg aria-hidden="true" className="w-3 h-3 shrink-0" viewBox="0 0 12 12" fill="none">
+      <path d="M1.5 1.5l9 9M10.5 1.5l-9 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
     <span className="sr-only">Not included</span>
     <span>Not included</span>
   </span>

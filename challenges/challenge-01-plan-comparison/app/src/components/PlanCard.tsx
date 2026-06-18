@@ -17,9 +17,9 @@ const ROW_CLS: Record<Rank, string> = {
 }
 
 const VAL_CLS: Record<Rank, string> = {
-  1: 'font-medium text-emerald-500',
-  2: 'font-medium text-amber-700',
-  3: 'font-medium text-rose-600',
+  1: 'font-semibold text-emerald-700',
+  2: 'font-semibold text-amber-700',
+  3: 'text-rose-600',
 }
 
 type Props = {
@@ -61,7 +61,7 @@ export function PlanCard({ plan, ranks, recommended = false }: Props) {
         <div className={`flex justify-between ${rowCls('copay_percentage')}`}>
           <dt className="text-gray-500">Copay</dt>
           <dd className={valCls('copay_percentage')}>
-            {plan.copay_percentage}%
+            {plan.copay_percentage === 0 ? 'No copay' : `${plan.copay_percentage}%`}
           </dd>
         </div>
 
@@ -85,6 +85,17 @@ export function PlanCard({ plan, ranks, recommended = false }: Props) {
           </div>
         ))}
       </dl>
+
+      <hr className="my-4 border-gray-100" />
+
+      <ul className="space-y-1">
+        {plan.highlights.map(h => (
+          <li key={h} className="flex items-center gap-1.5 text-xs text-gray-500">
+            <span className="text-emerald-500">✓</span>
+            {h}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
