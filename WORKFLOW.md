@@ -361,8 +361,12 @@ All commits in this loop land on the `challenge-XX` branch.
 6. Agent stops and asks: "[TICKET-ID] — [Task Name] complete. Please review
    the output. Reply 'ok' to log time and move to the next task, or describe
    what to fix."
-7. Agent logs Time Out (fills the "Out:" field in the task file)
-8. Agent commits on challenge-XX: "feat: [TICKET-ID] done — [Task Name]"
+
+   *** STOP. Do not proceed past this point until the user replies 'ok'. ***
+   *** Do NOT log Time Out or commit until 'ok' is received.             ***
+
+7. (After user 'ok') Agent logs Time Out (fills the "Out:" field in the task file)
+8. (After user 'ok') Agent commits on challenge-XX: "feat: [TICKET-ID] done — [Task Name]"
    (use fix: or chore: instead of feat: where appropriate per the conventions table)
 9. Move to the next task
 ```
