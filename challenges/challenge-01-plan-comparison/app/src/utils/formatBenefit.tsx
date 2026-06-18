@@ -3,18 +3,16 @@ import { BenefitType } from '../data/plans'
 
 const fmt = (n: number) => n === -1 ? 'Unlimited' : n.toLocaleString()
 
-function NotIncluded() {
-  return (
-    <span className="flex items-center gap-1 text-gray-400">
-      <span aria-hidden="true">✕</span>
-      <span className="sr-only">Not included</span>
-      <span>Not included</span>
-    </span>
-  )
-}
+const notIncluded = (
+  <span className="flex items-center gap-1 text-gray-400">
+    <span aria-hidden="true">✕</span>
+    <span className="sr-only">Not included</span>
+    <span>Not included</span>
+  </span>
+)
 
 export function formatBenefit(benefit: Benefit, type: BenefitType): React.ReactNode {
-  if (benefit === null) return <NotIncluded />
+  if (benefit === null) return notIncluded
 
   switch (type) {
     case BenefitType.Outpatient:

@@ -25,15 +25,23 @@ const VAL_CLS: Record<Rank, string> = {
 type Props = {
   plan: Plan
   ranks: Record<RowKey, Rank> | null
+  recommended?: boolean
 }
 
-export function PlanCard({ plan, ranks }: Props) {
+export function PlanCard({ plan, ranks, recommended = false }: Props) {
   const rowCls = (row: RowKey) => ranks ? ROW_CLS[ranks[row]] : ''
   const valCls = (row: RowKey) => ranks ? VAL_CLS[ranks[row]] : 'font-medium text-gray-900'
 
   return (
     <div className="flex-1 border border-gray-200 rounded-xl p-6 shadow-sm bg-white">
-      <h2 className="text-xl font-bold text-gray-900 mb-4">{plan.name}</h2>
+      <div className="flex items-center gap-2 mb-4">
+        <h2 className="text-xl font-bold text-gray-900">{plan.name}</h2>
+        {recommended && (
+          <span className="bg-green-500 text-white text-xs font-medium rounded-full px-2 py-0.5">
+            Recommended
+          </span>
+        )}
+      </div>
 
       <dl className="space-y-3 text-sm">
         <div className={`flex justify-between ${rowCls('monthly_premium')}`}>

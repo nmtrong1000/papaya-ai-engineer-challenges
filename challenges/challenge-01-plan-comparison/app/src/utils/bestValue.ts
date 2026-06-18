@@ -43,8 +43,6 @@ function extractValue(row: RowKey, plan: Plans[number]): number {
       const b = plan.benefits[BenefitType.Maternity]
       return b === null ? -Infinity : limit(b.limit_per_pregnancy)
     }
-    default:
-      return ((_: never) => 0)(row)
   }
 }
 
