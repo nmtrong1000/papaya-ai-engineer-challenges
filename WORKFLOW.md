@@ -337,6 +337,17 @@ Expected result: [describe what passing looks like]
 
 Once all task files exist, execute the plan task by task. Never jump ahead. Never work on two tasks simultaneously.
 
+### Commit planning artefacts first
+
+Before starting the first ticket, commit all planning files produced in Phases 1–5:
+
+```bash
+git add challenges/<challenge-slug>/plans/
+git commit -m "docs: [challenge-XX] planning complete — phases 1-5"
+```
+
+This locks the plan in version control before any code is written, making it easy to see what was planned vs. what was built.
+
 ### Loop per task
 
 All commits in this loop land on the `challenge-XX` branch.
