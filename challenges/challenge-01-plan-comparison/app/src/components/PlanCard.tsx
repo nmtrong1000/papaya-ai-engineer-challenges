@@ -33,7 +33,7 @@ export function PlanCard({ plan, ranks, recommended = false }: Props) {
   const valCls = (row: RowKey) => ranks ? VAL_CLS[ranks[row]] : 'font-medium text-gray-900'
 
   return (
-    <div className="flex-1 border border-gray-200 rounded-xl p-6 shadow-sm bg-white">
+    <div className="flex-1 min-w-0 border border-gray-200 rounded-xl p-6 shadow-sm bg-white">
       <div className="flex items-center gap-2 mb-4">
         <h2 className="text-xl font-bold text-gray-900">{plan.name}</h2>
         {recommended && (
