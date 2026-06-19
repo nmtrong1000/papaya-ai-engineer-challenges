@@ -164,13 +164,26 @@ List any third-party APIs (LLM providers, email services, etc.) with the same op
 
 ### Conclusion
 
-End with a one-paragraph summary of the full stack decision and the single most important reason for each choice.
+**Do not write the Conclusion when the file is first generated.** Leave a placeholder instead:
+
+```markdown
+## Conclusion
+
+_(To be written after options are confirmed.)_
+```
+
+The Conclusion is written in two steps:
+
+1. **Before user checks options:** Generate all sections with empty checkboxes. Stop and ask the user to check `[x]` on their chosen option in each section.
+2. **After user checks options:** Read every checked `[x]` entry, write the Conclusion as a one-paragraph summary of the full stack decision with the single most important reason for each choice. Then confirm with the user before proceeding.
 
 ### Confirmation
 
-> Agent stops here and asks: **"Phase 2 complete. Please review `plans/2.INFRASTRUCTURE.md` and check `[x]` on your chosen option in each section. Reply 'ok' to continue to Phase 3, or provide feedback to revise."**
+> After the file is first generated (Conclusion still a placeholder), agent asks: **"Phase 2 complete. Please review `plans/2.INFRASTRUCTURE.md` and check `[x]` on your chosen option in each section. Reply 'ok' when done."**
 >
-> Do not proceed to Phase 3 until the user replies.
+> After the user replies 'ok': agent reads the checked options, writes the Conclusion, then asks: **"Conclusion written based on your selections. Reply 'ok' to proceed to Phase 3, or provide feedback to revise."**
+>
+> Do not proceed to Phase 3 until the user approves the Conclusion.
 
 ---
 
