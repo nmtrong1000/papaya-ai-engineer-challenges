@@ -49,6 +49,6 @@ Expected result: All 5 routes respond with correct status codes and shapes. `ten
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
+- **In:** 2026-06-20 11:14:05
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
 - **Estimate:** 45 min
