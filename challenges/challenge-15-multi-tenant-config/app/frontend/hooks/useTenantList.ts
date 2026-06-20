@@ -13,6 +13,7 @@ export function useTenantList() {
   const [tenants, setTenants] = useState<TenantSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const fetchTenants = useCallback(async () => {
     setLoading(true);
@@ -30,9 +31,14 @@ export function useTenantList() {
   useEffect(() => { fetchTenants(); }, [fetchTenants]);
 
   const deleteTenant = useCallback(async (id: string) => {
-    await apiFetch(`/tenants/${id}`, { method: "DELETE" });
-    await fetchTenants();
+    setDeletingId(id);
+    try {
+      await apiFetch(`/tenants/${id}`, { method: "DELETE" });
+      await fetchTenants();
+    } finally {
+      setDeletingId(null);
+    }
   }, [fetchTenants]);
 
-  return { tenants, loading, error, deleteTenant };
+  return { tenants, loading, error, deleteTenant, deletingId };
 }

@@ -5,7 +5,7 @@ import { useTenantList } from "@/hooks/useTenantList";
 import { TenantList } from "@/components/TenantList";
 
 export default function TenantsPage() {
-  const { tenants, loading, error, deleteTenant } = useTenantList();
+  const { tenants, loading, error, deleteTenant, deletingId } = useTenantList();
 
   return (
     <div className="p-6">
@@ -22,8 +22,8 @@ export default function TenantsPage() {
       {loading && <p className="text-gray-500 text-sm">Loading…</p>}
       {error && <p className="text-red-600 text-sm">{error}</p>}
       {!loading && !error && (
-        <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-          <TenantList tenants={tenants} onDelete={deleteTenant} />
+        <div className="bg-white rounded-lg border border-gray-200 overflow-x-auto">
+          <TenantList tenants={tenants} onDelete={deleteTenant} deletingId={deletingId} />
         </div>
       )}
     </div>

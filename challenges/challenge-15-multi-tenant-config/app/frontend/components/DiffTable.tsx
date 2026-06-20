@@ -34,7 +34,7 @@ export function DiffTable({ configA, configB, nameA, nameB }: Props) {
   const ALL_EVENTS = Object.keys(NOTIFICATION_EVENT_LABELS);
 
   return (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
+    <div className="border border-gray-200 rounded-lg overflow-x-auto">
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="bg-gray-100 border-b border-gray-200">

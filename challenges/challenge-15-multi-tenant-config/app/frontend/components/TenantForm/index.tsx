@@ -19,6 +19,8 @@ type Props = {
   slug?: string;
   isEditMode?: boolean;
   onSubmit?: (data: TenantConfig, slug: string) => Promise<void>;
+  onDelete?: () => void;
+  deleting?: boolean;
   error?: string | null;
   extraSections?: React.ReactNode;
   readOnly?: boolean;
@@ -33,7 +35,7 @@ const emptyDefaults: FormValues = {
   customFields: [],
 };
 
-export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode = false, onSubmit, error, extraSections, readOnly = false }: Props) {
+export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode = false, onSubmit, onDelete, deleting = false, error, extraSections, readOnly = false }: Props) {
   const methods = useForm<FormValues>({
     resolver: zodResolver(TenantConfigSchema),
     defaultValues: { ...emptyDefaults, ...defaultValues },
@@ -84,14 +86,24 @@ export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode =
         </fieldset>
 
         {!readOnly && (
-          <div className="pt-2">
+          <div className="pt-2 flex items-center gap-3">
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || deleting}
               className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors"
             >
               {isSubmitting ? "Saving…" : "Save"}
             </button>
+            {onDelete && (
+              <button
+                type="button"
+                onClick={onDelete}
+                disabled={isSubmitting || deleting}
+                className="px-5 py-2 bg-white border border-red-300 text-red-600 text-sm font-medium rounded-md hover:bg-red-50 disabled:opacity-50 transition-colors"
+              >
+                {deleting ? "Deleting…" : "Delete"}
+              </button>
+            )}
           </div>
         )}
       </form>

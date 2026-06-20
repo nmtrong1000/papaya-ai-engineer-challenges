@@ -40,3 +40,20 @@ export function useUpdateTenant(id: string) {
 
   return { submit, submitting: state.submitting, error: state.error };
 }
+
+export function useDeleteTenant(id: string) {
+  const router = useRouter();
+  const [deleting, setDeleting] = useState(false);
+
+  const deleteTenant = async () => {
+    setDeleting(true);
+    try {
+      await apiFetch(`/tenants/${id}`, { method: "DELETE" });
+      router.push("/tenants");
+    } catch {
+      setDeleting(false);
+    }
+  };
+
+  return { deleteTenant, deleting };
+}

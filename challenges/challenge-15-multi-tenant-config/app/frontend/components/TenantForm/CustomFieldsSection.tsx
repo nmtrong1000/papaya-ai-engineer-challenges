@@ -26,7 +26,7 @@ export function CustomFieldsSection() {
           const errs = fieldErrors[idx] ?? {};
           return (
             <div key={field.id} className="border border-gray-200 rounded-lg p-4 space-y-3">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
                     Field Name <span className="text-red-500">*</span>
@@ -51,7 +51,7 @@ export function CustomFieldsSection() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 items-end">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
                     Type <span className="text-red-500">*</span>

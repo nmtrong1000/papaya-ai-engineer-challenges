@@ -39,7 +39,7 @@ export function ApprovalRulesSection() {
           <p className="text-xs text-gray-400">No tiers configured — all claims above threshold will be unassigned.</p>
         )}
         {fields.map((field, idx) => (
-          <div key={field.id} className="grid grid-cols-[1fr_1fr_1fr_auto] gap-2 items-start">
+          <div key={field.id} className="grid grid-cols-1 sm:grid-cols-[1fr_1fr_1fr_auto] gap-2 items-start">
             <div>
               {idx === 0 && <label className="block text-xs font-medium text-gray-500 mb-1">Min Amount <span className="text-red-500">*</span></label>}
               <input

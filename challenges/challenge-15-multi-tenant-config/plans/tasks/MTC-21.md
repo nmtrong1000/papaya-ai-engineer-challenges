@@ -1,41 +1,49 @@
-# MTC-21. Fix responsive design for mobile and tablet
+# MTC-21. Responsive design and UX improvements
 
 ## Requirement
 
-All 5 pages (`/tenants`, `/tenants/new`, `/tenants/[id]/edit`, `/preview`, `/diff`) are fully usable on mobile (≥ 375px) and tablet (≥ 768px) viewports with no horizontal overflow, no broken layouts, and no overlapping elements.
+All 5 pages are fully usable at 375px and 768px. The tenant edit/create experience has a back button, a delete button (edit only), and proper loading/error feedback. The tenant list shows a per-row loading state during delete so users know their action registered.
 
 ## Approach
 
-The main layout issues are: the sidebar is always visible and takes fixed width, pushing content off-screen on small viewports; tables in `/tenants` and `/diff` overflow horizontally; the multi-column form grids collapse poorly; and the version history modal is too wide on mobile. Fix by: making the sidebar collapsible on mobile (hamburger toggle), adding horizontal scroll containers to tables, collapsing grid layouts to single column below `md:`, and constraining the review modal to full-screen on mobile.
+Responsive work: collapsible sidebar on mobile, horizontal-scroll tables, single-column form grids below `sm:`. UX work: add "← Back" button to the edit and new-tenant page headers; add a "Delete" button next to Save on the edit page (calls delete + redirects); expose loading/error from `useTenantMutations` up to the page and render a submit spinner + error banner; track which tenant ID is being deleted in `useTenantList` and show a per-row spinner in `TenantList`.
 
 ## Execution Steps
 
-- [ ] Make the root layout responsive — add a hamburger button (`☰`) in a top bar visible only on mobile (`md:hidden`); toggle sidebar open/closed via `useState`; overlay sidebar on mobile with a backdrop that closes it on click; sidebar is always visible on `md+`
-- [ ] Fix `/tenants` table — wrap in `overflow-x-auto` so it scrolls horizontally on small screens; ensure action buttons don't wrap awkwardly
-- [ ] Fix `TenantForm` grid sections — change any multi-column grids (`grid-cols-2`, `grid-cols-3`) to `grid-cols-1 sm:grid-cols-2` or `sm:grid-cols-3`; ensure the claim form on `/preview` collapses similarly
-- [ ] Fix `/diff` table — wrap in `overflow-x-auto`; the three-column layout stays but scrolls horizontally on mobile
-- [ ] Fix version history modal — change `max-w-3xl` to `max-w-3xl w-full` with `mx-4` on mobile so it doesn't overflow; form inside already scrolls via `overflow-y-auto`
-- [ ] Smoke test all 5 pages at 375px (iPhone SE), 768px (iPad), and 1280px (desktop) using browser DevTools device emulation
+- [x] Make the root layout responsive — hamburger top bar on mobile, fixed overlay sidebar, always-visible on `md+`
+- [x] Fix `/tenants` table — `overflow-x-auto` wrapper
+- [x] Fix form grids — `grid-cols-1 sm:grid-cols-N` on ApprovalRules, CustomFields, diff dropdowns, preview fields, ClaimResult
+- [x] Fix `/diff` DiffTable — `overflow-x-auto` wrapper
+- [x] Fix VersionHistory table — `overflow-x-auto` wrapper
+- [x] Add "← Back" button to `/tenants/new` and `/tenants/[id]/edit` page headers
+- [x] Add "Delete" button next to Save on `/tenants/[id]/edit`; `useDeleteTenant` hook calls DELETE then redirects to `/tenants`
+- [x] `isSubmitting` (RHF) drives Save spinner; `error` prop shows red banner; `deleting` prop disables both buttons while delete is in progress
+- [x] Track `deletingId` in `useTenantList`; pass to `TenantList`; show "Deleting…" in that row; disable other delete buttons
+- [ ] Smoke test responsive layout at 375px, 768px, 1280px
 
 ## How to Test
 
-In Chrome DevTools → Toggle device toolbar:
+**Responsive (375px):**
+- Sidebar hidden; hamburger opens overlay; backdrop closes it
+- Tables scroll horizontally; form fields stack
 
-**375px (iPhone SE):**
-- Sidebar hidden; hamburger button visible in top bar; tap to open sidebar → overlay appears; tap backdrop to close
-- `/tenants` table scrolls horizontally; no content cut off
-- `/tenants/new` form fields stack in a single column
-- `/preview` claim form fields stack; result renders without overflow
-- `/diff` dropdowns stack to full width; table scrolls horizontally
+**UX — Back button:**
+- `/tenants/new` and `/tenants/[id]/edit` both show "← Back" in the header; clicking navigates to `/tenants`
 
-**768px (iPad):**
-- Sidebar visible and pinned; no hamburger shown
-- All pages render without horizontal overflow
+**UX — Delete on edit page:**
+- Open any tenant edit page; "Delete" button visible next to "Save"
+- Click Delete → tenant removed → redirected to `/tenants` → tenant gone from list
 
-Expected result: No horizontal overflow on any page at 375px. Sidebar is collapsible on mobile. Tables scroll horizontally rather than clipping content.
+**UX — Save loading/error:**
+- Block the PUT request in DevTools Network → click Save → button shows "Saving…", disabled → error banner appears above submit area
+- Unblock → save works → redirects normally
+
+**UX — Table delete loading:**
+- Click Delete on a tenant row → that row immediately shows "Deleting…" spinner; other rows still active
+- After delete completes → row disappears
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
+- **In:** 2026-06-20 21:40:00
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
-- **Estimate:** 40 min
+- **Estimate:** 60 min

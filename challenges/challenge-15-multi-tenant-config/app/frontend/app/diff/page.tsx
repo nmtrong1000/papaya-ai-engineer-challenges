@@ -25,7 +25,7 @@ export default function DiffPage() {
     <div className="max-w-5xl mx-auto px-6 py-8 space-y-6">
       <h1 className="text-xl font-semibold text-gray-900">Config Diff</h1>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Tenant A</label>
           <select value={idA} onChange={(e) => setIdA(e.target.value)} className={selectClass}>
