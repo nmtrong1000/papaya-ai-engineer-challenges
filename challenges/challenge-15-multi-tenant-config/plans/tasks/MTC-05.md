@@ -10,12 +10,12 @@ All schemas live in `app/shared/src/schemas/`. Types are inferred with `z.infer<
 
 ## Execution Steps
 
-- [ ] Install Zod in `app/shared`: `npm install zod` from `app/shared`
-- [ ] Create `app/shared/src/schemas/tenant.ts` — BrandingSchema, ClaimTypeEnum (OUTPATIENT|INPATIENT|DENTAL|MATERNITY|OPTICAL), ClaimTypeConfigSchema, ApprovalTierSchema (maxAmount nullable), NotificationEventEnum, NotificationChannelEnum, NotificationSchema, CustomFieldTypeEnum, CustomFieldSchema, TenantConfigSchema
-- [ ] Create `app/shared/src/schemas/version.ts` — VersionConfigSchema (schemaVersion: z.number() + all 6 config sections reusing sub-schemas from tenant.ts)
-- [ ] Create `app/shared/src/schemas/claim.ts` — ClaimDataSchema (claimType, amount, submissionDate as z.coerce.date()) and ProcessClaimResultSchema (requiredDocs, optionalDocs, autoApproved, approvalTier nullable, notifications, slaDueDate, customFields)
-- [ ] Update `app/shared/src/index.ts` — re-export all schemas and infer and export TypeScript types: `TenantConfig`, `VersionConfig`, `ClaimData`, `ProcessClaimResult`
-- [ ] Verify TypeScript compiles clean in both `app/backend` and `app/frontend`: `npx tsc --noEmit` in each
+- [x] Install Zod in `app/shared`: `npm install zod` from `app/shared`
+- [x] Create `app/shared/src/schemas/tenant.ts` — BrandingSchema, ClaimTypeEnum (OUTPATIENT|INPATIENT|DENTAL|MATERNITY|OPTICAL), ClaimTypeConfigSchema, ApprovalTierSchema (maxAmount nullable), NotificationEventEnum, NotificationChannelEnum, NotificationSchema, CustomFieldTypeEnum, CustomFieldSchema, TenantConfigSchema
+- [x] Create `app/shared/src/schemas/version.ts` — VersionConfigSchema (schemaVersion: z.number() + all 6 config sections reusing sub-schemas from tenant.ts)
+- [x] Create `app/shared/src/schemas/claim.ts` — ClaimDataSchema (claimType, amount, submissionDate as z.coerce.date()) and ProcessClaimResultSchema (requiredDocs, optionalDocs, autoApproved, approvalTier nullable, notifications, slaDueDate, customFields)
+- [x] Update `app/shared/src/index.ts` — re-export all schemas and infer and export TypeScript types: `TenantConfig`, `VersionConfig`, `ClaimData`, `ProcessClaimResult`
+- [x] Verify TypeScript compiles clean in both `app/backend` and `app/frontend`: `npx tsc --noEmit` in each
 
 ## How to Test
 
@@ -44,5 +44,5 @@ Expected result: Both packages compile clean. `@mtc/shared` import resolves. `Te
 ## Time
 
 - **In:** 2026-06-20 10:59:30
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 11:02:36
 - **Estimate:** 25 min
