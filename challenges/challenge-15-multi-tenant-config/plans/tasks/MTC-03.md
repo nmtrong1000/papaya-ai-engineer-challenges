@@ -35,6 +35,6 @@ Expected result: Migration completes without errors. All 8 tables visible in Pri
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
+- **In:** 2026-06-20 10:25:56
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
 - **Estimate:** 30 min
