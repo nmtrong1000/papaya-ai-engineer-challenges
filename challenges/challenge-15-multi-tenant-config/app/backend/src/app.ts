@@ -1,4 +1,5 @@
 import express, { type NextFunction, type Request, type Response } from "express";
+import { ErrorCode, ErrorMessage } from "@mtc/shared";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swaggerConfig";
@@ -23,7 +24,7 @@ app.use("/tenants", processClaimRouter);
 
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   const status = err.status ?? 500;
-  res.status(status).json({ message: err.message ?? "Internal server error" });
+  res.status(status).json({ error: { code: err.code ?? ErrorCode.INTERNAL_ERROR, message: err.message ?? ErrorMessage.INTERNAL_ERROR } });
 });
 
 export default app;

@@ -22,6 +22,7 @@ Install `swagger-jsdoc` and `swagger-ui-express`. Write all `@swagger` JSDoc ann
 - [x] Create `app/backend/src/docs/processClaim.docs.ts` — `@swagger` JSDoc for POST /tenants/:id/process-claim, and component schemas: ClaimData, ProcessClaimResult
 - [x] Mount Swagger UI in `app/backend/src/app.ts` at `/api-docs` using `swagger-ui-express` and the exported `swaggerSpec`
 - [x] Start the backend and verify `http://localhost:4000/api-docs` loads with all 10 endpoints listed
+- [x] Define `{ data: T }` success envelope and `{ error: { code, message } }` error envelope as reusable OpenAPI components; update all response schemas in `tenants.docs.ts`, `versions.docs.ts`, and `processClaim.docs.ts` to wrap their payloads accordingly; update `app.ts` error handler and all controllers to return these shapes; update `apiFetch` in the frontend to unwrap `.data`
 
 ## How to Test
 

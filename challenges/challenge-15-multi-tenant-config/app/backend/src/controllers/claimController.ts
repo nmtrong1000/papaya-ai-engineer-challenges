@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { ClaimDataSchema } from "@mtc/shared";
+import { ClaimDataSchema, ErrorCode, ErrorMessage } from "@mtc/shared";
 import { tenantService } from "../services/tenantService";
 import { claimService } from "../services/claimService";
 
@@ -8,7 +8,7 @@ export const claimController = {
     try {
       const parsed = ClaimDataSchema.safeParse(req.body);
       if (!parsed.success) {
-        return res.status(400).json({ message: "Validation error", errors: parsed.error.flatten() });
+        return res.status(400).json({ error: { code: ErrorCode.VALIDATION_ERROR, message: ErrorMessage.VALIDATION_ERROR, details: parsed.error.flatten() } });
       }
       const tenant = await tenantService.getTenantById(req.params.id);
       const config = {
@@ -42,7 +42,7 @@ export const claimController = {
         })),
       };
       const result = claimService.processClaim(config, parsed.data);
-      res.json(result);
+      res.json({ data: result });
     } catch (err) {
       next(err);
     }
