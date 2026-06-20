@@ -46,11 +46,6 @@ export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode =
 
   return (
     <FormProvider {...methods}>
-      {error && (
-        <div className="mb-4 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-          {error}
-        </div>
-      )}
       <form
         onSubmit={readOnly || !onSubmit
           ? (e) => e.preventDefault()
@@ -86,24 +81,31 @@ export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode =
         </fieldset>
 
         {!readOnly && (
-          <div className="pt-2 flex items-center gap-3">
-            <button
-              type="submit"
-              disabled={isSubmitting || deleting}
-              className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors"
-            >
-              {isSubmitting ? "Saving…" : "Save"}
-            </button>
-            {onDelete && (
-              <button
-                type="button"
-                onClick={onDelete}
-                disabled={isSubmitting || deleting}
-                className="px-5 py-2 bg-white border border-red-300 text-red-600 text-sm font-medium rounded-md hover:bg-red-50 disabled:opacity-50 transition-colors"
-              >
-                {deleting ? "Deleting…" : "Delete"}
-              </button>
+          <div className="pt-2 space-y-3">
+            {error && (
+              <div className="rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                {error}
+              </div>
             )}
+            <div className="flex items-center gap-3">
+              <button
+                type="submit"
+                disabled={isSubmitting || deleting}
+                className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              >
+                {isSubmitting ? "Saving…" : "Save"}
+              </button>
+              {onDelete && (
+                <button
+                  type="button"
+                  onClick={onDelete}
+                  disabled={isSubmitting || deleting}
+                  className="px-5 py-2 bg-white border border-red-300 text-red-600 text-sm font-medium rounded-md hover:bg-red-50 disabled:opacity-50 transition-colors"
+                >
+                  {deleting ? "Deleting…" : "Delete"}
+                </button>
+              )}
+            </div>
           </div>
         )}
       </form>

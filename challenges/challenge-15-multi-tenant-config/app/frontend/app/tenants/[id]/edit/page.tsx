@@ -4,6 +4,7 @@ import { use, useState } from "react";
 import Link from "next/link";
 import { TenantForm } from "@/components/TenantForm";
 import { VersionHistory } from "@/components/VersionHistory";
+import { LoadingOverlay } from "@/components/LoadingOverlay";
 import { useTenant } from "@/hooks/useTenant";
 import { useUpdateTenant, useDeleteTenant } from "@/hooks/useTenantMutations";
 import { useVersionHistory } from "@/hooks/useVersionHistory";
@@ -33,7 +34,7 @@ export default function EditTenantPage({ params }: { params: Promise<{ id: strin
     }
   };
 
-  if (loading) return <div className="p-6 text-sm text-gray-500">Loading…</div>;
+  if (loading) return <LoadingOverlay />;
   if (loadError) return <div className="p-6 text-sm text-red-600">{loadError}</div>;
   if (!config) return null;
 
