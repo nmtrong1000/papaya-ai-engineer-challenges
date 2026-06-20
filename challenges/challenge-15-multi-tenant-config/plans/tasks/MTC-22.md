@@ -10,16 +10,16 @@ Copy shared content into each consumer: backend gets the Zod schemas (for runtim
 
 ## Execution Steps
 
-- [ ] Copy `app/shared/src/schemas/` into `app/backend/src/schemas/` and `app/shared/src/constants.ts` into `app/backend/src/constants.ts`; update all backend imports from `@mtc/shared` to local relative paths
-- [ ] Copy `app/shared/src/schemas/` into `app/frontend/lib/schemas/` and `app/shared/src/constants.ts` into `app/frontend/lib/constants.ts`; update all frontend imports from `@mtc/shared` to local relative paths
-- [ ] Remove `"@mtc/shared": "*"` from `app/backend/package.json` and `app/frontend/package.json` dependencies; remove `zod` from shared (it stays as a direct dep in each app)
-- [ ] Remove `app/shared/` directory entirely
-- [ ] Update `app/package.json` — remove `workspaces` field and `shared` entry; or delete `app/package.json` and `app/package-lock.json` entirely and give each app its own lock file
-- [ ] Update `app/backend/tsconfig.json` — remove `"@mtc/shared"` path alias
-- [ ] Update `app/frontend/tsconfig.json` — remove `"@mtc/shared"` path alias; add `"@/lib/schemas/*": ["./lib/schemas/*"]` if needed
-- [ ] Update `app/backend/Dockerfile` — change `COPY package*.json ./` to copy only `backend/package.json`; run `npm install` (not `npm ci` from workspace root); remove all shared-related COPY steps
-- [ ] Update `app/frontend/vercel.json` — change `installCommand` from `cd .. && npm install` to `npm install`
-- [ ] Run `npm run build` in `app/backend` and `npm run build` in `app/frontend` — both must compile clean
+- [x] Copy `app/shared/src/schemas/` into `app/backend/src/schemas/` and `app/shared/src/constants.ts` into `app/backend/src/constants.ts`; update all backend imports from `@mtc/shared` to local relative paths
+- [x] Copy `app/shared/src/schemas/` into `app/frontend/lib/schemas/` and `app/shared/src/constants.ts` into `app/frontend/lib/constants.ts`; update all frontend imports from `@mtc/shared` to local relative paths
+- [x] Remove `"@mtc/shared": "*"` from `app/backend/package.json` and `app/frontend/package.json` dependencies; remove `zod` from shared (it stays as a direct dep in each app)
+- [x] Remove `app/shared/` directory entirely
+- [x] Update `app/package.json` — remove `workspaces` field and `shared` entry; or delete `app/package.json` and `app/package-lock.json` entirely and give each app its own lock file
+- [x] Update `app/backend/tsconfig.json` — remove `"@mtc/shared"` path alias
+- [x] Update `app/frontend/tsconfig.json` — remove `"@mtc/shared"` path alias; add `"@/lib/schemas/*": ["./lib/schemas/*"]` if needed
+- [x] Update `app/backend/Dockerfile` — change `COPY package*.json ./` to copy only `backend/package.json`; run `npm install` (not `npm ci` from workspace root); remove all shared-related COPY steps
+- [x] Update `app/frontend/vercel.json` — change `installCommand` from `cd .. && npm install` to `npm install`
+- [x] Run `npm run build` in `app/backend` and `npm run build` in `app/frontend` — both must compile clean
 - [ ] Redeploy backend: `fly deploy --config backend/fly.toml --local-only` from `app/backend/`
 - [ ] Redeploy frontend: `vercel --prod` from `app/frontend/`
 
@@ -42,6 +42,6 @@ Expected result: No `app/shared/` directory. No `@mtc/shared` import anywhere. B
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
+- **In:** 2026-06-20 23:20:00
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
 - **Estimate:** 60 min
