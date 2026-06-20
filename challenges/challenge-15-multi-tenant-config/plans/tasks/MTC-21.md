@@ -19,7 +19,7 @@ Responsive work: collapsible sidebar on mobile, horizontal-scroll tables, single
 - [x] Add "Delete" button next to Save on `/tenants/[id]/edit`; `useDeleteTenant` hook calls DELETE then redirects to `/tenants`
 - [x] `isSubmitting` (RHF) drives Save spinner; `error` prop shows red banner; `deleting` prop disables both buttons while delete is in progress
 - [x] Track `deletingId` in `useTenantList`; pass to `TenantList`; show "Deleting…" in that row; disable other delete buttons
-- [ ] Smoke test responsive layout at 375px, 768px, 1280px
+- [x] Smoke test responsive layout at 375px, 768px, 1280px
 
 ## How to Test
 
@@ -45,5 +45,5 @@ Responsive work: collapsible sidebar on mobile, horizontal-scroll tables, single
 ## Time
 
 - **In:** 2026-06-20 21:40:00
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 23:15:00
 - **Estimate:** 60 min
