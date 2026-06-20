@@ -15,13 +15,13 @@ Install `swagger-jsdoc` and `swagger-ui-express`. Write all `@swagger` JSDoc ann
 
 ## Execution Steps
 
-- [ ] Install `swagger-jsdoc` and `swagger-ui-express` in `app/backend`, and their `@types` devDependencies
-- [ ] Create `app/backend/src/docs/swaggerConfig.ts` — swagger-jsdoc options with OpenAPI 3.0 definition (title: MTC Backend API, server: http://localhost:4000) and glob `apis: ['./src/docs/*.docs.ts']`; export `swaggerSpec`
-- [ ] Create `app/backend/src/docs/tenants.docs.ts` — `@swagger` JSDoc for GET/POST /tenants, GET/PUT/DELETE /tenants/:id, and component schemas: TenantSummary, TenantDetail, TenantConfig, BrandingInput, ClaimTypeConfig, ApprovalTier, Notification, CustomField
-- [ ] Create `app/backend/src/docs/versions.docs.ts` — `@swagger` JSDoc for GET /tenants/:id/versions and POST /tenants/:id/rollback/:version, and component schema: VersionSummary
-- [ ] Create `app/backend/src/docs/processClaim.docs.ts` — `@swagger` JSDoc for POST /tenants/:id/process-claim, and component schemas: ClaimData, ProcessClaimResult
-- [ ] Mount Swagger UI in `app/backend/src/app.ts` at `/api-docs` using `swagger-ui-express` and the exported `swaggerSpec`
-- [ ] Start the backend and verify `http://localhost:4000/api-docs` loads with all 10 endpoints listed
+- [x] Install `swagger-jsdoc` and `swagger-ui-express` in `app/backend`, and their `@types` devDependencies
+- [x] Create `app/backend/src/docs/swaggerConfig.ts` — swagger-jsdoc options with OpenAPI 3.0 definition (title: MTC Backend API, server: http://localhost:4000) and glob `apis: ['./src/docs/*.docs.ts']`; export `swaggerSpec`
+- [x] Create `app/backend/src/docs/tenants.docs.ts` — `@swagger` JSDoc for GET/POST /tenants, GET/PUT/DELETE /tenants/:id, and component schemas: TenantSummary, TenantDetail, TenantConfig, BrandingInput, ClaimTypeConfig, ApprovalTier, Notification, CustomField
+- [x] Create `app/backend/src/docs/versions.docs.ts` — `@swagger` JSDoc for GET /tenants/:id/versions and POST /tenants/:id/rollback/:version, and component schema: VersionSummary
+- [x] Create `app/backend/src/docs/processClaim.docs.ts` — `@swagger` JSDoc for POST /tenants/:id/process-claim, and component schemas: ClaimData, ProcessClaimResult
+- [x] Mount Swagger UI in `app/backend/src/app.ts` at `/api-docs` using `swagger-ui-express` and the exported `swaggerSpec`
+- [x] Start the backend and verify `http://localhost:4000/api-docs` loads with all 10 endpoints listed
 
 ## How to Test
 
@@ -42,5 +42,5 @@ Expected result:
 ## Time
 
 - **In:** 2026-06-20 11:02:52
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 11:13:49
 - **Estimate:** 30 min
