@@ -12,13 +12,13 @@ The backend uses a **three-layer architecture**: Routes (path definitions only) 
 
 ## Execution Steps
 
-- [ ] Create `app/backend/package.json` — name: `@mtc/backend`, scripts: `dev` (ts-node-dev with tsconfig-paths), `build` (tsc), `start` (node dist/index.js); deps: express, cors, @mtc/shared; devDeps: TypeScript tooling, ts-node-dev, tsconfig-paths, @types/express, @types/cors, @types/node
-- [ ] Create `app/backend/tsconfig.json` — target ES2020, CommonJS, outDir: dist, strict, esModuleInterop, and `"@mtc/shared": ["../shared/src/index.ts"]` in paths
-- [ ] Create `app/backend/src/app.ts` — Express app with JSON body parser, CORS (origin: `http://localhost:3000`), and `GET /health` → `{ status: 'ok' }`; export the app
-- [ ] Create `app/backend/src/index.ts` — import the app and listen on `PORT` (default 4000)
-- [ ] Run `npm install` from `app/` root to link the new workspace member
-- [ ] Verify the backend starts and `GET /health` returns `{ "status": "ok" }`
-- [ ] Verify `@mtc/shared` resolves — add a temporary import, run `npx tsc --noEmit` in `app/backend`, remove the import
+- [x] Create `app/backend/package.json` — name: `@mtc/backend`, scripts: `dev` (ts-node-dev with tsconfig-paths), `build` (tsc), `start` (node dist/index.js); deps: express, cors, @mtc/shared; devDeps: TypeScript tooling, ts-node-dev, tsconfig-paths, @types/express, @types/cors, @types/node
+- [x] Create `app/backend/tsconfig.json` — target ES2020, CommonJS, outDir: dist, strict, esModuleInterop, and `"@mtc/shared": ["../shared/src/index.ts"]` in paths
+- [x] Create `app/backend/src/app.ts` — Express app with JSON body parser, CORS (origin: `http://localhost:3000`), and `GET /health` → `{ status: 'ok' }`; export the app
+- [x] Create `app/backend/src/index.ts` — import the app and listen on `PORT` (default 4000)
+- [x] Run `npm install` from `app/` root to link the new workspace member
+- [x] Verify the backend starts and `GET /health` returns `{ "status": "ok" }`
+- [x] Verify `@mtc/shared` resolves — add a temporary import, run `npx tsc --noEmit` in `app/backend`, remove the import
 
 ## How to Test
 
@@ -46,5 +46,5 @@ Expected result: Server starts on port 4000. `GET /health` returns `{ "status": 
 ## Time
 
 - **In:** 2026-06-20 10:06:19
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 10:25:36
 - **Estimate:** 20 min
