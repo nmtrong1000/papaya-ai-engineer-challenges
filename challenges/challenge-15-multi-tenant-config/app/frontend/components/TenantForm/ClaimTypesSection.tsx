@@ -10,10 +10,8 @@ type ClaimType = (typeof ALL_TYPES)[number];
 
 
 export function ClaimTypesSection() {
-  const { register, control, watch, formState: { errors } } = useFormContext<FormValues>();
+  const { register, control, formState: { errors } } = useFormContext<FormValues>();
   const { fields, append, remove } = useFieldArray({ control, name: "claimTypes" });
-
-  const enabledTypes = watch("claimTypes").map((ct) => ct.type);
 
   const toggle = (type: ClaimType, checked: boolean) => {
     if (checked) {

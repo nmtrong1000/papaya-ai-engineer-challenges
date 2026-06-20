@@ -28,6 +28,7 @@ This task only creates the scaffold; the `hooks/` and `components/` directories 
 - [x] Replace `app/frontend/app/page.tsx` with a minimal "MTC Admin" placeholder component
 - [x] Verify `http://localhost:3000` renders without errors: `npm run dev` in `app/frontend`
 - [x] Verify `@mtc/shared` resolves — add a temporary import, run `npx tsc --noEmit` in `app/frontend`, remove the import
+- [x] Add ESLint: install `eslint`, `typescript-eslint`, `eslint-plugin-react-hooks`; create `eslint.config.mjs` with flat config (ignoring `.next/`, `node_modules/`), `tseslint.configs.recommended`, react-hooks rules, `no-explicit-any: warn`, `no-unused-vars: error`; add `"lint": "eslint . --ext .ts,.tsx"` script; fix all errors surfaced
 
 ## How to Test
 
