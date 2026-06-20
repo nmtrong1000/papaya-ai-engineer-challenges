@@ -41,6 +41,6 @@ Expected result:
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
+- **In:** 2026-06-20 11:02:52
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
 - **Estimate:** 30 min
