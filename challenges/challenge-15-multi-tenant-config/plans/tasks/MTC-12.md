@@ -10,13 +10,13 @@ Follow the layer-based architecture: `hooks/useTenant.ts` owns the fetch of the 
 
 ## Execution Steps
 
-- [ ] Install React Hook Form and Zod resolver in `app/frontend`: `npm install react-hook-form @hookform/resolvers`
-- [ ] Create `app/frontend/hooks/useTenant.ts` — `useTenant(id)` that fetches `GET /tenants/:id` on mount and returns `{ config, loading, error }`
-- [ ] Create `app/frontend/components/TenantForm/index.tsx` — pure UI form wrapper: `useForm<TenantConfig>` with `zodResolver(TenantConfigSchema)` and `defaultValues` prop; renders section components and a submit button that shows "Saving…" when `isSubmitting` is true
-- [ ] Create `app/frontend/components/TenantForm/BrandingSection.tsx` — 4 labeled inputs (Company Name, Logo URL, Primary Color `type="color"`, Secondary Color); shows inline Zod error messages; no API calls
-- [ ] Create `app/frontend/components/TenantForm/ClaimTypesSection.tsx` — 5 checkboxes (OUTPATIENT through OPTICAL); checking a type appends via `useFieldArray`, unchecking removes it; each enabled type expands a sub-form with Required Docs (textarea), Optional Docs (textarea), SLA Days, and Escalate To inputs; shows per-field validation errors
-- [ ] Create `app/frontend/app/tenants/new/page.tsx` — thin `'use client'` component: renders `<TenantForm>` with empty defaults and a no-op `onSubmit`
-- [ ] Create `app/frontend/app/tenants/[id]/edit/page.tsx` — thin `'use client'` component: uses `useTenant(params.id)`, shows loading/error states, passes `config` as `defaultValues` to `<TenantForm>`
+- [x] Install React Hook Form and Zod resolver in `app/frontend`: `npm install react-hook-form @hookform/resolvers`
+- [x] Create `app/frontend/hooks/useTenant.ts` — `useTenant(id)` that fetches `GET /tenants/:id` on mount and returns `{ config, loading, error }`
+- [x] Create `app/frontend/components/TenantForm/index.tsx` — pure UI form wrapper: `useForm<TenantConfig>` with `zodResolver(TenantConfigSchema)` and `defaultValues` prop; renders section components and a submit button that shows "Saving…" when `isSubmitting` is true
+- [x] Create `app/frontend/components/TenantForm/BrandingSection.tsx` — 4 labeled inputs (Company Name, Logo URL, Primary Color `type="color"`, Secondary Color); shows inline Zod error messages; no API calls
+- [x] Create `app/frontend/components/TenantForm/ClaimTypesSection.tsx` — 5 checkboxes (OUTPATIENT through OPTICAL); checking a type appends via `useFieldArray`, unchecking removes it; each enabled type expands a sub-form with Required Docs (textarea), Optional Docs (textarea), SLA Days, and Escalate To inputs; shows per-field validation errors
+- [x] Create `app/frontend/app/tenants/new/page.tsx` — thin `'use client'` component: renders `<TenantForm>` with empty defaults and a no-op `onSubmit`
+- [x] Create `app/frontend/app/tenants/[id]/edit/page.tsx` — thin `'use client'` component: uses `useTenant(params.id)`, shows loading/error states, passes `config` as `defaultValues` to `<TenantForm>`
 
 ## How to Test
 
@@ -41,5 +41,5 @@ Expected result: `TenantForm` and section components contain no `fetch` calls. D
 ## Time
 
 - **In:** 2026-06-20 12:16:13
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 13:13:23
 - **Estimate:** 40 min

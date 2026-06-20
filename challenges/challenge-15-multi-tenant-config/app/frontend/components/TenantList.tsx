@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { TenantSummary } from "../hooks/useTenantList";
+import type { TenantSummary } from "@/hooks/useTenantList";
 
 type Props = {
   tenants: TenantSummary[];

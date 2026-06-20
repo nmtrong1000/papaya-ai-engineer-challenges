@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useTenantList } from "../../hooks/useTenantList";
-import { TenantList } from "../../components/TenantList";
+import { useTenantList } from "@/hooks/useTenantList";
+import { TenantList } from "@/components/TenantList";
 
 export default function TenantsPage() {
   const { tenants, loading, error, deleteTenant } = useTenantList();
