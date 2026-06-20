@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Tenant {
+  id                     String              @id @default(cuid())
+  slug                   String              @unique
+  autoApprovalThreshold  Int                 @default(0)
+  currentVersionId       String?
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+
+  branding               Branding?
+  claimTypes             TenantClaimType[]
+  notifications          TenantNotification[]
+  approvalTiers          ApprovalTier[]
+  customFields           CustomField[]
+  versions               TenantVersion[]     @relation("AllVersions")
+  currentVersion         TenantVersion?      @relation("CurrentVersion", fields: [currentVersionId], references: [id])
+}
+
+model Branding {
+  id              String  @id @default(cuid())
+  tenantId        String  @unique
+  name            String
+  logoUrl         String  @default("")
+  primaryColor    String  @default("#000000")
+  secondaryColor  String  @default("#ffffff")
+
+  tenant          Tenant  @relation(fields: [tenantId], references: [id])
+}
+
+model ClaimType {
+  id      String            @id @default(cuid())
+  name    String            @unique
+  tenants TenantClaimType[]
+}
+
+model TenantClaimType {
+  id           String    @id @default(cuid())
+  tenantId     String
+  claimTypeId  String
+  requiredDocs String[]
+  optionalDocs String[]
+  slaDays      Int       @default(5)
+  escalateTo   String    @default("")
+
+  tenant       Tenant    @relation(fields: [tenantId], references: [id])
+  claimType    ClaimType @relation(fields: [claimTypeId], references: [id])
+}
+
+model TenantNotification {
+  id            String   @id @default(cuid())
+  tenantId      String
+  event         String
+  channels      String[]
+  emailTemplate String?
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, event])
+}
+
+model ApprovalTier {
+  id           String  @id @default(cuid())
+  tenantId     String
+  minAmount    Int
+  maxAmount    Int?
+  approverRole String
+  tierOrder    Int
+
+  tenant       Tenant  @relation(fields: [tenantId], references: [id])
+}
+
+model CustomField {
+  id         String  @id @default(cuid())
+  tenantId   String
+  name       String
+  fieldKey   String
+  fieldType  String
+  required   Boolean @default(false)
+  options    String[]
+  fieldOrder Int
+
+  tenant     Tenant  @relation(fields: [tenantId], references: [id])
+}
+
+model TenantVersion {
+  id            String   @id @default(cuid())
+  tenantId      String
+  version       Int
+  schemaVersion Int      @default(1)
+  config        Json
+  note          String?
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation("AllVersions", fields: [tenantId], references: [id])
+  currentFor    Tenant[] @relation("CurrentVersion")
+}

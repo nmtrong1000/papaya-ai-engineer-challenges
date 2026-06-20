@@ -10,12 +10,12 @@ Prisma lives in `app/backend`. The schema defines all 8 models matching the ERD:
 
 ## Execution Steps
 
-- [ ] Install Prisma and Prisma Client in `app/backend`: `npm install @prisma/client` and `npm install -D prisma`, then run `npx prisma init`
-- [ ] Set `DATABASE_URL` in `app/backend/.env` to the Neon PostgreSQL connection string (from Neon dashboard → Connection string) and add `.env` to `.gitignore`
-- [ ] Write `app/backend/prisma/schema.prisma` with all 8 models — Tenant (with nullable `currentVersionId` self-relation), Branding (1:1 with Tenant), ClaimType (global lookup), TenantClaimType (with `String[]` for docs arrays), TenantNotification, ApprovalTier, CustomField, TenantVersion (with `Json` config and named back-relation to Tenant)
-- [ ] Run `npx prisma migrate dev --name init` from `app/backend`
-- [ ] Run `npx prisma generate` to generate Prisma Client
-- [ ] Verify all 8 tables appear in `npx prisma studio` with the correct columns
+- [x] Install Prisma and Prisma Client in `app/backend`: `npm install @prisma/client` and `npm install -D prisma`, then run `npx prisma init`
+- [x] Set `DATABASE_URL` in `app/backend/.env` to the Neon PostgreSQL connection string (from Neon dashboard → Connection string) and add `.env` to `.gitignore`
+- [x] Write `app/backend/prisma/schema.prisma` with all 8 models — Tenant (with nullable `currentVersionId` self-relation), Branding (1:1 with Tenant), ClaimType (global lookup), TenantClaimType (with `String[]` for docs arrays), TenantNotification, ApprovalTier, CustomField, TenantVersion (with `Json` config and named back-relation to Tenant)
+- [x] Run `npx prisma migrate dev --name init` from `app/backend`
+- [x] Run `npx prisma generate` to generate Prisma Client
+- [x] Verify all 8 tables appear in `npx prisma studio` with the correct columns
 
 ## How to Test
 
@@ -36,5 +36,5 @@ Expected result: Migration completes without errors. All 8 tables visible in Pri
 ## Time
 
 - **In:** 2026-06-20 10:25:56
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 10:51:20
 - **Estimate:** 30 min
