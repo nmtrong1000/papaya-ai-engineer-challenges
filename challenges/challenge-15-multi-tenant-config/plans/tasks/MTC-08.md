@@ -47,6 +47,6 @@ Expected result: Version list grows after each save and rollback. Rollback creat
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
+- **In:** 2026-06-20 11:47:54
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
 - **Estimate:** 25 min
