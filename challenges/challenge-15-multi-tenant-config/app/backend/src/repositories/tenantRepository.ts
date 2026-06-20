@@ -1,6 +1,6 @@
 import { prisma } from "../lib/prisma";
 import type { PrismaClient } from "../generated/prisma/client";
-import type { TenantConfig, VersionConfig } from "@mtc/shared";
+import type { TenantConfig, VersionConfig } from "../lib/shared";
 
 type Tx = Parameters<Parameters<PrismaClient["$transaction"]>[0]>[0];
 

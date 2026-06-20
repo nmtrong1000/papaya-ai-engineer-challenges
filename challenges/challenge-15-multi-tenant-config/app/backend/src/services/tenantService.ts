@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prisma";
 import { configCache } from "../lib/configCache";
 import { tenantRepository as repo } from "../repositories/tenantRepository";
-import type { TenantConfig, VersionConfig } from "@mtc/shared";
+import type { TenantConfig, VersionConfig } from "../lib/shared";
 
 function buildSnapshot(config: TenantConfig): VersionConfig {
   return { schemaVersion: 1, ...config };

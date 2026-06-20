@@ -1,5 +1,5 @@
 import { addBusinessDays } from "../lib/businessDays";
-import type { TenantConfig, ClaimData, ProcessClaimResult } from "@mtc/shared";
+import type { TenantConfig, ClaimData, ProcessClaimResult } from "../lib/shared";
 
 export const claimService = {
   processClaim(config: TenantConfig, data: ClaimData): ProcessClaimResult {

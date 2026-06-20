@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import { ClaimDataSchema, ErrorCode, ErrorMessage } from "@mtc/shared";
+import { ClaimDataSchema } from "../lib/shared";
+import { ErrorCode, ErrorMessage } from "../constants";
 import { tenantService } from "../services/tenantService";
 import { claimService } from "../services/claimService";
 

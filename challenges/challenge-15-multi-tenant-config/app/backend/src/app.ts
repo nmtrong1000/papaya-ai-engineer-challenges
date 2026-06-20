@@ -1,5 +1,5 @@
 import express, { type NextFunction, type Request, type Response } from "express";
-import { ErrorCode, ErrorMessage } from "@mtc/shared";
+import { ErrorCode, ErrorMessage } from "./constants";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swaggerConfig";

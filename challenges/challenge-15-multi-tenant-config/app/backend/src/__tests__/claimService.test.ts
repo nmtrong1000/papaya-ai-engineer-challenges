@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { claimService } from "../services/claimService";
-import type { TenantConfig } from "@mtc/shared";
+import type { TenantConfig } from "../lib/shared";
 
 const baseConfig: TenantConfig = {
   branding: { name: "Test", logoUrl: "", primaryColor: "#000", secondaryColor: "#fff" },

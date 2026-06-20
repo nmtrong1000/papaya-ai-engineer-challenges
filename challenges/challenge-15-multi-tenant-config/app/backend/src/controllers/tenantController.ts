@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
-import { TenantConfigSchema, ErrorCode, ErrorMessage } from "@mtc/shared";
+import { TenantConfigSchema } from "../lib/shared";
+import { ErrorCode, ErrorMessage } from "../constants";
 import { tenantService } from "../services/tenantService";
 
 export const tenantController = {

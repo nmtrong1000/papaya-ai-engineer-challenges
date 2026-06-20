@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { versionService } from "../services/versionService";
-import { ErrorCode, ErrorMessage } from "@mtc/shared";
+import { ErrorCode, ErrorMessage } from "../constants";
 
 export const versionController = {
   list: async (req: Request, res: Response, next: NextFunction) => {

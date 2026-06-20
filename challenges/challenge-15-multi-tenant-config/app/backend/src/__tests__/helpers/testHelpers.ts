@@ -1,6 +1,6 @@
 import { tenantService } from "../../services/tenantService";
 import { tenantRepository } from "../../repositories/tenantRepository";
-import type { TenantConfig } from "@mtc/shared";
+import type { TenantConfig } from "../../lib/shared";
 
 export const minimalConfig: TenantConfig = {
   branding: { name: "Test Tenant", logoUrl: "", primaryColor: "#000000", secondaryColor: "#ffffff" },

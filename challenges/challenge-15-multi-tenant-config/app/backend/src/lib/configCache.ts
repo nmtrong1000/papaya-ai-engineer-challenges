@@ -1,4 +1,4 @@
-import type { TenantConfig } from "@mtc/shared";
+import type { TenantConfig } from "./shared";
 
 const cache = new Map<string, TenantConfig>();
 

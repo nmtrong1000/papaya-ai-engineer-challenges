@@ -2,7 +2,7 @@ import { tenantRepository } from "../repositories/tenantRepository";
 import { versionRepository } from "../repositories/versionRepository";
 import { tenantService } from "./tenantService";
 import { migrateConfig } from "../lib/migrateConfig";
-import type { TenantConfig } from "@mtc/shared";
+import type { TenantConfig } from "../lib/shared";
 
 function notFound(message: string) {
   return Object.assign(new Error(message), { status: 404 });
