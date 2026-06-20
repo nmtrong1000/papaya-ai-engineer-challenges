@@ -7,6 +7,9 @@ import type { TenantConfig } from "@mtc/shared";
 import type { z } from "zod";
 import { BrandingSection } from "@/components/TenantForm/BrandingSection";
 import { ClaimTypesSection } from "@/components/TenantForm/ClaimTypesSection";
+import { ApprovalRulesSection } from "@/components/TenantForm/ApprovalRulesSection";
+import { NotificationsSection } from "@/components/TenantForm/NotificationsSection";
+import { CustomFieldsSection } from "@/components/TenantForm/CustomFieldsSection";
 
 type FormValues = z.input<typeof TenantConfigSchema>;
 
@@ -38,6 +41,9 @@ export function TenantForm({ defaultValues, onSubmit, extraSections }: Props) {
       <form onSubmit={handleSubmit((data) => onSubmit(data as unknown as TenantConfig))} className="space-y-8">
         <BrandingSection />
         <ClaimTypesSection />
+        <ApprovalRulesSection />
+        <NotificationsSection />
+        <CustomFieldsSection />
         {extraSections}
         <div className="pt-2">
           <button

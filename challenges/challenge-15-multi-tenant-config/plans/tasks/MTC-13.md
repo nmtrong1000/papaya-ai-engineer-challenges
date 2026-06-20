@@ -10,11 +10,11 @@ Add three section components to the existing `TenantForm`. Approval rules uses `
 
 ## Execution Steps
 
-- [ ] Create `app/frontend/components/TenantForm/ApprovalRulesSection.tsx` — number input for `autoApprovalThreshold`; `useFieldArray` for tiers; each row has Min Amount / Max Amount (nullable, empty = no upper bound) / Approver Role / Remove button; "Add Tier" button appends an empty row; shows per-tier validation errors
-- [ ] Create `app/frontend/components/TenantForm/NotificationsSection.tsx` — `useFieldArray` for notifications; on mount, append all 4 events (claim_submitted, approved, rejected, payment_sent) if `fields.length === 0`; each row shows the event label (read-only), channel checkboxes (email, sms, webhook), and an optional email template input; no add/remove buttons
-- [ ] Create `app/frontend/components/TenantForm/CustomFieldsSection.tsx` — `useFieldArray` for custom fields; each row has Name / Field Key / Type select (text/number/select) / Required checkbox / Options input (visible only when `fieldType === 'select'`) / Remove button; "Add Field" button appends an empty row with auto-incremented `fieldOrder`
-- [ ] Add all three sections to `app/frontend/components/TenantForm/index.tsx` in order: Branding → Claim Types → Approval Rules → Notifications → Custom Fields → Save button
-- [ ] Verify the full form pre-fills correctly on `/tenants/[id]/edit` for all 3 seeded tenants
+- [x] Create `app/frontend/components/TenantForm/ApprovalRulesSection.tsx` — number input for `autoApprovalThreshold`; `useFieldArray` for tiers; each row has Min Amount / Max Amount (nullable, empty = no upper bound) / Approver Role / Remove button; "Add Tier" button appends an empty row; shows per-tier validation errors
+- [x] Create `app/frontend/components/TenantForm/NotificationsSection.tsx` — `useFieldArray` for notifications; on mount, append all 4 events (claim_submitted, approved, rejected, payment_sent) if `fields.length === 0`; each row shows the event label (read-only), channel checkboxes (email, sms, webhook), and an optional email template input; no add/remove buttons
+- [x] Create `app/frontend/components/TenantForm/CustomFieldsSection.tsx` — `useFieldArray` for custom fields; each row has Name / Field Key / Type select (text/number/select) / Required checkbox / Options input (visible only when `fieldType === 'select'`) / Remove button; "Add Field" button appends an empty row with auto-incremented `fieldOrder`
+- [x] Add all three sections to `app/frontend/components/TenantForm/index.tsx` in order: Branding → Claim Types → Approval Rules → Notifications → Custom Fields → Save button
+- [x] Verify the full form pre-fills correctly on `/tenants/[id]/edit` for all 3 seeded tenants
 
 ## How to Test
 
@@ -44,5 +44,5 @@ Expected result: All three sections render and pre-fill correctly for all 3 tena
 ## Time
 
 - **In:** 2026-06-20 13:13:23
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 13:33:15
 - **Estimate:** 45 min
