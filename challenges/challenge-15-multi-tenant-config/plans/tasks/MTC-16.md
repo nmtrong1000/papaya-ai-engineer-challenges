@@ -1,19 +1,20 @@
-# MTC-16. Build config history and rollback UI
+# MTC-16. Build config diff view
 
 ## Requirement
 
-The tenant edit page has a "Version History" tab that lists all saved versions and allows rolling back to any prior version — with all fetching and mutation in `useVersionHistory` and all rendering in a pure `VersionHistory` component.
+The page at `/diff` lets a user select two tenants and renders a side-by-side comparison of their current configs with differing fields highlighted — with all fetching in a `useDiff` hook and all rendering in a pure `DiffTable` component.
 
 ## Approach
 
-Follow the layer-based architecture: `hooks/useVersionHistory.ts` owns `GET /tenants/:id/versions` and `POST /tenants/:id/rollback/:version`, re-fetches the list after rollback, and returns the new version number. `components/VersionHistory.tsx` is a pure UI component that receives the version list and an `onRollback` callback as props — it shows the table and confirmation prompt but has no API awareness. `app/tenants/[id]/edit/page.tsx` gains a tab UI: "Edit Config" renders `<TenantForm>`; "Version History" renders `<VersionHistory>`. After rollback, a `configKey` counter increments to trigger `useTenant` re-fetch, which causes the form to reset to the rolled-back config.
+Follow the layer-based architecture: `hooks/useDiff.ts` owns the parallel fetch of both tenant configs using `Promise.all`, exposing them only when both IDs are set and different. `components/DiffRow.tsx` is a pure UI row with a yellow highlight when its two values differ. `components/DiffTable.tsx` is a pure UI table that receives two `TenantConfig` objects and two tenant names and renders one `DiffRow` per field, grouped into sections. `app/diff/page.tsx` is thin: it uses `useTenantList()` for the dropdown options and `useDiff(idA, idB)` for the configs.
 
 ## Execution Steps
 
-- [ ] Create `app/frontend/hooks/useVersionHistory.ts` — `useVersionHistory(tenantId)` that fetches `GET /tenants/:id/versions` on mount; exposes `rollback(version)` that calls `POST /tenants/:id/rollback/:version`, re-fetches the list, and returns the new version number; returns `{ versions, loading, error, rollback }`
-- [ ] Create `app/frontend/components/VersionHistory.tsx` — pure UI table (Version # / Created At / Note / Action); "Roll back" button disabled for the row with the highest version number (current version); on click: `window.confirm`, call `onRollback(version)`, call `onRollbackSuccess(newVersion)` on resolution; show a dismissible green success banner "Rolled back to version N. New version M created."; format `createdAt` as a readable locale string
-- [ ] Add `tab` state (`'edit' | 'history'`, default `'edit'`) to `app/frontend/app/tenants/[id]/edit/page.tsx` with two tab buttons
-- [ ] Compose both tabs in the edit page using `useVersionHistory(params.id)` and the existing `useTenant` + `useUpdateTenant` hooks; on rollback success, increment `configKey` to trigger `useTenant` re-fetch; pass updated config to `TenantForm` via `defaultValues`
+- [ ] Create `app/frontend/hooks/useDiff.ts` — `useDiff(idA, idB)` that fetches both tenant configs in parallel via `Promise.all` when both IDs are set and different; resets configs to null when either ID is null or they are equal; returns `{ configA, configB, loading, error }`
+- [ ] Create `app/frontend/components/DiffRow.tsx` — pure UI `<tr>` with label / valueA / valueB cells; applies `bg-yellow-100` when `valueA !== valueB`
+- [ ] Create `app/frontend/components/DiffTable.tsx` — pure UI table accepting `configA`, `configB`, `nameA`, `nameB`; renders a `<DiffRow>` per field grouped into sections: Branding (name, logoUrl, primaryColor, secondaryColor), Approval Rules (threshold, tier count, tier list), Claim Types (one row per platform type: "Enabled (N days)" or "Disabled"), Notifications (one row per event: channels joined), Custom Fields (field count and names)
+- [ ] Create `app/frontend/app/diff/page.tsx` — thin `'use client'` component: uses `useTenantList()` for two dropdown selects, passes selected IDs to `useDiff`, shows a placeholder when IDs are not set or equal, renders `<DiffTable>` when both configs are loaded
+- [ ] Add "Diff" link to `app/frontend/components/Sidebar.tsx`
 
 ## How to Test
 
@@ -21,26 +22,22 @@ Follow the layer-based architecture: `hooks/useVersionHistory.ts` owns `GET /ten
 # Both backend (port 4000) and frontend (port 3000) running
 ```
 
-Open `http://localhost:3000/tenants/<safeguard-id>/edit`:
+Open `http://localhost:3000/diff`:
 
-**Test 1 — initial history:**
-- Click "Version History" tab → 1 row; its "Roll back" button is disabled (it's the current version)
+**Test 1 — same tenant:**
+- Select SafeGuard Insurance in both dropdowns
+- Expected: placeholder "Select two different tenants to compare"
 
-**Test 2 — multiple saves:**
-1. "Edit Config" → change name to "SafeGuard v2", save → redirects to list
-2. Re-open edit → change to "SafeGuard v3", save again
-3. "Version History" → 3 rows; version 3 has disabled rollback; versions 1 and 2 have active buttons
+**Test 2 — SafeGuard vs GovHealth:**
+- Many yellow rows: branding colors, autoApprovalThreshold (20000 vs 0), tier counts, MATERNITY/OPTICAL (disabled vs enabled), SLA days, notification channels (email vs all three), custom field counts
 
-**Test 3 — rollback:**
-1. Click "Roll back" on version 1, confirm
-2. Green banner: "Rolled back to version 1. New version 4 created."
-3. History shows 4 rows; version 4 is now disabled
-4. Switch to "Edit Config" → Company Name shows "SafeGuard Insurance" (original v1 value)
+**Test 3 — switching tenants:**
+- Change Tenant B to HealthFirst — table rerenders with updated differences
 
-Expected result: `EditTenantPage` orchestrates the two hooks but makes no direct fetch calls. `VersionHistory` has no API knowledge — it calls `onRollback` and receives the new version number via `onRollbackSuccess`. Version count only ever grows; no rows are deleted or mutated.
+Expected result: `DiffPage` contains no `fetch` calls. `DiffTable` and `DiffRow` are pure UI — they receive data as props. `useDiff` fires exactly one parallel `Promise.all` when both IDs change.
 
 ## Time
 
 - **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
-- **Estimate:** 35 min
+- **Estimate:** 40 min

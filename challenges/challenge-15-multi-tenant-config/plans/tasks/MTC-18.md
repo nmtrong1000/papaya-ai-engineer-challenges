@@ -1,57 +1,54 @@
-# MTC-18. Deploy frontend to Vercel and smoke test
+# MTC-18. Write integration tests for all API endpoints
 
 ## Requirement
 
-The Next.js frontend is deployed to Vercel, pointed at the live Fly.io backend via `NEXT_PUBLIC_API_URL`, and all 5 pages (`/tenants`, `/tenants/new`, `/tenants/[id]/edit`, `/preview`, `/diff`) function correctly against the live data with no console errors on the golden path.
+All tenant CRUD, version history, rollback, and process-claim API endpoints are covered by passing integration tests that hit a real test database, with ≥ 60% line coverage across all route and controller modules.
 
 ## Approach
 
-Deploy from `app/frontend` using the Vercel CLI. Set `NEXT_PUBLIC_API_URL` in Vercel project environment variables. After deploy, update the `CORS_ORIGIN` secret on Fly.io to the live Vercel URL and redeploy the backend. Then run the full smoke test manually in a browser against both live URLs.
+Use Vitest + Supertest to spin up the Express `app` in-process (no `listen`) and fire HTTP requests against it. Each test suite uses a dedicated test tenant seeded at the start and cleaned up at the end. The test database is the same Neon instance pointed to by `DATABASE_URL` — tests run against a real Prisma client and real FK constraints. No mocking of Prisma or the HTTP layer. A shared `testHelpers.ts` handles tenant setup and teardown.
+
+## Testing Strategy
+
+- **Type:** integration
+- **Framework:** Vitest + Supertest
+- **Coverage target:** ≥ 60% line coverage across `src/controllers/` and `src/routes/`
+- **What to test:**
+  - `GET /tenants` — returns list with branding
+  - `POST /tenants` — creates tenant, returns 201; duplicate slug returns 409; invalid body returns 400
+  - `GET /tenants/:id` — returns full config; unknown ID returns 404
+  - `PUT /tenants/:id` — updates config, creates new version, returns updated tenant
+  - `DELETE /tenants/:id` — deletes tenant and all child rows, returns 204
+  - `GET /tenants/:id/versions` — returns version list (no config JSON)
+  - `POST /tenants/:id/versions/:versionId/rollback` — creates new version from historical snapshot
+  - `POST /tenants/:id/process-claim` — returns claim result for valid payload; invalid payload returns 400
+- **What NOT to test:** Prisma migration correctness, adapter behaviour, Next.js frontend
 
 ## Execution Steps
 
-- [ ] Install the Vercel CLI if not already installed: `npm install -g vercel`
-- [ ] Run `vercel --prod` from `app/frontend` and link to a new project; accept detected Next.js settings
-- [ ] Add `NEXT_PUBLIC_API_URL = https://<fly-app>.fly.dev` in Vercel project settings → Environment Variables (Production scope)
-- [ ] Redeploy to pick up the env var: `vercel --prod` again (or push a commit)
-- [ ] Note the live Vercel URL and update Fly.io CORS secret: `fly secrets set CORS_ORIGIN="https://<vercel-url>"` from `app/backend`
-- [ ] Redeploy the backend to apply the updated CORS secret: `fly deploy` from `app/backend`
-- [ ] Run the full smoke test in a browser against the live Vercel URL (see How to Test)
-- [ ] Record both live URLs in the fields below
+- [ ] Confirm Vitest and Supertest are installed in `app/backend` (`npm install -D supertest @types/supertest` if not already present)
+- [ ] Create `app/backend/src/__tests__/helpers/testHelpers.ts` — exports `seedTestTenant(slug)` (creates tenant + minimal config via `TenantService`) and `cleanupTestTenant(id)` (calls `TenantRepository.delete`)
+- [ ] Create `app/backend/src/__tests__/integration/tenants.integration.test.ts` — `beforeAll` seeds one test tenant; tests cover all 5 CRUD routes; `afterAll` cleans up
+- [ ] Create `app/backend/src/__tests__/integration/versions.integration.test.ts` — seeds tenant, creates a version via PUT, tests list and rollback routes; cleans up
+- [ ] Create `app/backend/src/__tests__/integration/processClaim.integration.test.ts` — seeds tenant with OUTPATIENT claim type config; POSTs a valid claim and an invalid claim; cleans up
+- [ ] Run `npm run test` and confirm all integration tests pass
+- [ ] Run `npm run coverage` and confirm ≥ 60% line coverage across controller and route files
 
 ## How to Test
 
-Open the live Vercel URL and walk through each page:
+```bash
+cd challenges/challenge-15-multi-tenant-config/app/backend
+npm run test
+# Expected: all integration tests pass
 
-**Page 1 — Tenant List (`/tenants`):**
-- [ ] Table shows SafeGuard Insurance, HealthFirst, GovHealth; no console errors
+npm run coverage
+# Expected: ≥ 60% Lines for src/controllers/ and src/routes/
+```
 
-**Page 2 — Create Tenant (`/tenants/new`):**
-- [ ] Fill in a valid config for a 4th tenant (e.g. "Demo Corp") and submit
-- [ ] Redirected to `/tenants`; new tenant visible in table; no console errors
-
-**Page 3 — Edit Tenant + Version History (`/tenants/[id]/edit`):**
-- [ ] Open Demo Corp; change company name, save; re-open and click "Version History" → 2 rows
-- [ ] Roll back to version 1 → success banner → form resets to original name; history shows 3 rows; no console errors
-
-**Page 4 — Preview (`/preview`):**
-- [ ] SafeGuard INPATIENT 75000 → assessor tier, ~10 business-day SLA, email notifications
-- [ ] GovHealth INPATIENT 75000 → officer tier, longer SLA, all channels; no console errors
-
-**Page 5 — Diff (`/diff`):**
-- [ ] SafeGuard vs GovHealth → yellow-highlighted differences; no console errors
-
-**Cleanup:**
-- [ ] Delete "Demo Corp" from `/tenants` — row disappears
-
-Expected result: All 5 pages load and function against the live backend. A 4th tenant can be created and used immediately. No console errors on the golden path. Both live URLs are publicly accessible.
-
-**Record the live URLs:**
-- Frontend: `https://_____________________.vercel.app`
-- Backend: `https://_____________________.fly.dev`
+Expected result: All tests green against the live Neon test database. Coverage threshold met. No TypeScript errors.
 
 ## Time
 
 - **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
-- **Estimate:** 20 min
+- **Estimate:** 50 min

@@ -1,20 +1,19 @@
-# MTC-15. Build config diff view
+# MTC-15. Build preview mode
 
 ## Requirement
 
-The page at `/diff` lets a user select two tenants and renders a side-by-side comparison of their current configs with differing fields highlighted — with all fetching in a `useDiff` hook and all rendering in a pure `DiffTable` component.
+The page at `/preview` lets a user select a tenant and enter a claim, then displays the `processClaim` result — with all API calls in `useProcessClaim` and all result rendering in a pure `ClaimResult` component.
 
 ## Approach
 
-Follow the layer-based architecture: `hooks/useDiff.ts` owns the parallel fetch of both tenant configs using `Promise.all`, exposing them only when both IDs are set and different. `components/DiffRow.tsx` is a pure UI row with a yellow highlight when its two values differ. `components/DiffTable.tsx` is a pure UI table that receives two `TenantConfig` objects and two tenant names and renders one `DiffRow` per field, grouped into sections. `app/diff/page.tsx` is thin: it uses `useTenantList()` for the dropdown options and `useDiff(idA, idB)` for the configs.
+Follow the layer-based architecture: `hooks/useProcessClaim.ts` owns the POST call, loading state, and error state; it clears the previous result on each new submission. `components/ClaimResult.tsx` is a pure UI component that receives a `ProcessClaimResult` as a prop and renders it in labelled sections. `app/preview/page.tsx` is thin: it wires `useTenantList` (for the dropdown), `useProcessClaim`, and a local claim form, then renders `<ClaimResult>` when a result is available.
 
 ## Execution Steps
 
-- [ ] Create `app/frontend/hooks/useDiff.ts` — `useDiff(idA, idB)` that fetches both tenant configs in parallel via `Promise.all` when both IDs are set and different; resets configs to null when either ID is null or they are equal; returns `{ configA, configB, loading, error }`
-- [ ] Create `app/frontend/components/DiffRow.tsx` — pure UI `<tr>` with label / valueA / valueB cells; applies `bg-yellow-100` when `valueA !== valueB`
-- [ ] Create `app/frontend/components/DiffTable.tsx` — pure UI table accepting `configA`, `configB`, `nameA`, `nameB`; renders a `<DiffRow>` per field grouped into sections: Branding (name, logoUrl, primaryColor, secondaryColor), Approval Rules (threshold, tier count, tier list), Claim Types (one row per platform type: "Enabled (N days)" or "Disabled"), Notifications (one row per event: channels joined), Custom Fields (field count and names)
-- [ ] Create `app/frontend/app/diff/page.tsx` — thin `'use client'` component: uses `useTenantList()` for two dropdown selects, passes selected IDs to `useDiff`, shows a placeholder when IDs are not set or equal, renders `<DiffTable>` when both configs are loaded
-- [ ] Add "Diff" link to `app/frontend/components/Sidebar.tsx`
+- [ ] Create `app/frontend/hooks/useProcessClaim.ts` — `useProcessClaim()` with `result`, `loading`, `error` state and a `submit(tenantId, claimData)` function that clears state, calls `POST /tenants/:id/process-claim`, and sets result or error
+- [ ] Create `app/frontend/components/ClaimResult.tsx` — pure UI component receiving `ProcessClaimResult` as a prop; renders sections: Required Documents (`<ul>`), Optional Documents (`<ul>`), Approval (green "Auto-approved" badge or tier amount range + approver role), Notifications (table: Event / Channels / Template), SLA Due Date, Custom Fields (table or "None"); no fetch calls
+- [ ] Create `app/frontend/app/preview/page.tsx` — thin `'use client'` component: uses `useTenantList()` for tenant dropdown, `useProcessClaim()` for submission; renders a claim form (claimType select with 5 options, amount number input, submissionDate date input defaulting to today) and `<ClaimResult>` when result is available; shows loading spinner or error message
+- [ ] Add "Preview" link to `app/frontend/components/Sidebar.tsx`
 
 ## How to Test
 
@@ -22,19 +21,22 @@ Follow the layer-based architecture: `hooks/useDiff.ts` owns the parallel fetch 
 # Both backend (port 4000) and frontend (port 3000) running
 ```
 
-Open `http://localhost:3000/diff`:
+Open `http://localhost:3000/preview`:
 
-**Test 1 — same tenant:**
-- Select SafeGuard Insurance in both dropdowns
-- Expected: placeholder "Select two different tenants to compare"
+**Test 1 — auto-approval:**
+- Select SafeGuard Insurance, OUTPATIENT, amount 10000, today
+- Expected: green "Auto-approved" badge (10000 < 20000 threshold)
 
-**Test 2 — SafeGuard vs GovHealth:**
-- Many yellow rows: branding colors, autoApprovalThreshold (20000 vs 0), tier counts, MATERNITY/OPTICAL (disabled vs enabled), SLA days, notification channels (email vs all three), custom field counts
+**Test 2 — different tiers for same claim across tenants (INPATIENT, 75000):**
+- SafeGuard: assessor (20k–100k), 10 SLA days, email only
+- HealthFirst: senior_assessor (50k–200k), 14 SLA days, email + sms
+- GovHealth: officer (0–100k), 20 SLA days, all channels
 
-**Test 3 — switching tenants:**
-- Change Tenant B to HealthFirst — table rerenders with updated differences
+**Test 3 — disabled claim type:**
+- Select SafeGuard Insurance, MATERNITY, any amount
+- Expected: red error "Claim type MATERNITY not enabled for this tenant"
 
-Expected result: `DiffPage` contains no `fetch` calls. `DiffTable` and `DiffRow` are pure UI — they receive data as props. `useDiff` fires exactly one parallel `Promise.all` when both IDs change.
+Expected result: `PreviewPage` contains no `fetch` calls. `ClaimResult` receives a plain object prop and renders it — no hooks or API calls inside it. Switching tenants and resubmitting shows updated results.
 
 ## Time
 

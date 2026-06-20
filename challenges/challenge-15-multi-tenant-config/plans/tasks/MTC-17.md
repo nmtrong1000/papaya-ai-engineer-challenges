@@ -1,44 +1,46 @@
-# MTC-17. Deploy backend to Fly.io
+# MTC-17. Build config history and rollback UI
 
 ## Requirement
 
-The Express backend is deployed to Fly.io and publicly accessible at a `*.fly.dev` URL, with the Neon database connection and CORS origin configured via Fly.io secrets, and all 10 API endpoints responding correctly against the seeded data.
+The tenant edit page has a "Version History" tab that lists all saved versions and allows rolling back to any prior version — with all fetching and mutation in `useVersionHistory` and all rendering in a pure `VersionHistory` component.
 
 ## Approach
 
-Add a multi-stage `Dockerfile` to `app/backend` — the builder stage copies `prisma/` and `src/`, runs `prisma generate`, and compiles TypeScript; the runtime stage only copies `dist/` and `node_modules/`. Run `fly launch` to generate `fly.toml`, set secrets for `DATABASE_URL` and `CORS_ORIGIN`, then `fly deploy`. Update `app/backend/src/app.ts` to read `CORS_ORIGIN` from env so the live Vercel frontend is accepted alongside `http://localhost:3000`.
+Follow the layer-based architecture: `hooks/useVersionHistory.ts` owns `GET /tenants/:id/versions` and `POST /tenants/:id/rollback/:version`, re-fetches the list after rollback, and returns the new version number. `components/VersionHistory.tsx` is a pure UI component that receives the version list and an `onRollback` callback as props — it shows the table and confirmation prompt but has no API awareness. `app/tenants/[id]/edit/page.tsx` gains a tab UI: "Edit Config" renders `<TenantForm>`; "Version History" renders `<VersionHistory>`. After rollback, a `configKey` counter increments to trigger `useTenant` re-fetch, which causes the form to reset to the rolled-back config.
 
 ## Execution Steps
 
-- [ ] Verify TypeScript builds cleanly: run `npm run build` in `app/backend` and fix any errors
-- [ ] Ensure `"start": "node dist/index.js"` exists in `app/backend/package.json` scripts
-- [ ] Update `app/backend/src/app.ts` to allow multiple CORS origins — `['http://localhost:3000', process.env.CORS_ORIGIN].filter(Boolean)`
-- [ ] Create `app/backend/Dockerfile` — multi-stage: builder installs deps, copies prisma + src, runs `prisma generate` + `npm run build`; runtime copies dist and node_modules, exposes port 4000, runs `node dist/index.js`
-- [ ] Create `app/backend/.dockerignore` — exclude node_modules, .env, src, *.md
-- [ ] Install the Fly CLI if not already installed: `brew install flyctl`
-- [ ] Log in to Fly: `fly auth login`
-- [ ] Run `fly launch` from `app/backend` — choose app name and region, select NO when asked to deploy now
-- [ ] Set `internal_port = 4000` in `fly.toml` under `[http_service]`
-- [ ] Set Fly secrets: `fly secrets set DATABASE_URL="<neon-url>" CORS_ORIGIN="<placeholder>"`
-- [ ] Deploy: `fly deploy` from `app/backend` and note the `*.fly.dev` URL
-- [ ] Smoke test `GET /health` and `GET /tenants` against the live URL
+- [ ] Create `app/frontend/hooks/useVersionHistory.ts` — `useVersionHistory(tenantId)` that fetches `GET /tenants/:id/versions` on mount; exposes `rollback(version)` that calls `POST /tenants/:id/rollback/:version`, re-fetches the list, and returns the new version number; returns `{ versions, loading, error, rollback }`
+- [ ] Create `app/frontend/components/VersionHistory.tsx` — pure UI table (Version # / Created At / Note / Action); "Roll back" button disabled for the row with the highest version number (current version); on click: `window.confirm`, call `onRollback(version)`, call `onRollbackSuccess(newVersion)` on resolution; show a dismissible green success banner "Rolled back to version N. New version M created."; format `createdAt` as a readable locale string
+- [ ] Add `tab` state (`'edit' | 'history'`, default `'edit'`) to `app/frontend/app/tenants/[id]/edit/page.tsx` with two tab buttons
+- [ ] Compose both tabs in the edit page using `useVersionHistory(params.id)` and the existing `useTenant` + `useUpdateTenant` hooks; on rollback success, increment `configKey` to trigger `useTenant` re-fetch; pass updated config to `TenantForm` via `defaultValues`
 
 ## How to Test
 
 ```bash
-curl https://<fly-url>/health
-# Expected: { "status": "ok" }
-
-curl https://<fly-url>/tenants
-# Expected: JSON array with SafeGuard Insurance, HealthFirst, GovHealth
+# Both backend (port 4000) and frontend (port 3000) running
 ```
 
-Open `https://<fly-url>/api-docs` in a browser — Swagger UI loads with all 10 endpoints.
+Open `http://localhost:3000/tenants/<safeguard-id>/edit`:
 
-Expected result: Backend is live. All 3 seeded tenants returned by `GET /tenants`. Swagger UI accessible. Health check returns `{ "status": "ok" }`.
+**Test 1 — initial history:**
+- Click "Version History" tab → 1 row; its "Roll back" button is disabled (it's the current version)
+
+**Test 2 — multiple saves:**
+1. "Edit Config" → change name to "SafeGuard v2", save → redirects to list
+2. Re-open edit → change to "SafeGuard v3", save again
+3. "Version History" → 3 rows; version 3 has disabled rollback; versions 1 and 2 have active buttons
+
+**Test 3 — rollback:**
+1. Click "Roll back" on version 1, confirm
+2. Green banner: "Rolled back to version 1. New version 4 created."
+3. History shows 4 rows; version 4 is now disabled
+4. Switch to "Edit Config" → Company Name shows "SafeGuard Insurance" (original v1 value)
+
+Expected result: `EditTenantPage` orchestrates the two hooks but makes no direct fetch calls. `VersionHistory` has no API knowledge — it calls `onRollback` and receives the new version number via `onRollbackSuccess`. Version count only ever grows; no rows are deleted or mutated.
 
 ## Time
 
 - **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
-- **Estimate:** 30 min
+- **Estimate:** 35 min

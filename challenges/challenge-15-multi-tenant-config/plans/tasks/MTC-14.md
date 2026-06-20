@@ -1,19 +1,20 @@
-# MTC-14. Build preview mode
+# MTC-14. Wire tenant form submission and validation to the API
 
 ## Requirement
 
-The page at `/preview` lets a user select a tenant and enter a claim, then displays the `processClaim` result — with all API calls in `useProcessClaim` and all result rendering in a pure `ClaimResult` component.
+Submitting the tenant config form at `/tenants/new` calls `POST /tenants` and at `/tenants/[id]/edit` calls `PUT /tenants/:id`, with API error messages displayed above the form and a redirect to `/tenants` on success — with all mutation logic in a `useTenantMutations` hook.
 
 ## Approach
 
-Follow the layer-based architecture: `hooks/useProcessClaim.ts` owns the POST call, loading state, and error state; it clears the previous result on each new submission. `components/ClaimResult.tsx` is a pure UI component that receives a `ProcessClaimResult` as a prop and renders it in labelled sections. `app/preview/page.tsx` is thin: it wires `useTenantList` (for the dropdown), `useProcessClaim`, and a local claim form, then renders `<ClaimResult>` when a result is available.
+Follow the layer-based architecture: `hooks/useTenantMutations.ts` owns the POST/PUT API calls, loading state, error state, and redirect on success. Pages remain thin — they call the hook and pass the returned `submit` handler as `onSubmit` to `TenantForm`. `TenantForm` stays a pure UI component: it calls `props.onSubmit(data)` and renders any error it receives via an `error` prop. The `slug` field is editable on create and read-only on edit (slug is immutable after creation).
 
 ## Execution Steps
 
-- [ ] Create `app/frontend/hooks/useProcessClaim.ts` — `useProcessClaim()` with `result`, `loading`, `error` state and a `submit(tenantId, claimData)` function that clears state, calls `POST /tenants/:id/process-claim`, and sets result or error
-- [ ] Create `app/frontend/components/ClaimResult.tsx` — pure UI component receiving `ProcessClaimResult` as a prop; renders sections: Required Documents (`<ul>`), Optional Documents (`<ul>`), Approval (green "Auto-approved" badge or tier amount range + approver role), Notifications (table: Event / Channels / Template), SLA Due Date, Custom Fields (table or "None"); no fetch calls
-- [ ] Create `app/frontend/app/preview/page.tsx` — thin `'use client'` component: uses `useTenantList()` for tenant dropdown, `useProcessClaim()` for submission; renders a claim form (claimType select with 5 options, amount number input, submissionDate date input defaulting to today) and `<ClaimResult>` when result is available; shows loading spinner or error message
-- [ ] Add "Preview" link to `app/frontend/components/Sidebar.tsx`
+- [ ] Create `app/frontend/hooks/useTenantMutations.ts` — `useCreateTenant()` hook (POST /tenants, loading/error state, `router.push('/tenants')` on success) and `useUpdateTenant(id)` hook (PUT /tenants/:id, same pattern)
+- [ ] Add `error?: string | null` prop to `TenantForm/index.tsx` — renders a red banner above the form when set
+- [ ] Add `slug` input field to `TenantForm/index.tsx` (above BrandingSection) — editable when `!isEditMode`, read-only display when `isEditMode`; label "Slug", pattern `[a-z0-9-]+`
+- [ ] Update `app/frontend/app/tenants/new/page.tsx` — use `useCreateTenant()`, pass `submit`, `isSubmitting`, and `error` to `<TenantForm>`
+- [ ] Update `app/frontend/app/tenants/[id]/edit/page.tsx` — use `useUpdateTenant(params.id)` alongside `useTenant(params.id)`; pass both handlers and states to `<TenantForm>`
 
 ## How to Test
 
@@ -21,25 +22,26 @@ Follow the layer-based architecture: `hooks/useProcessClaim.ts` owns the POST ca
 # Both backend (port 4000) and frontend (port 3000) running
 ```
 
-Open `http://localhost:3000/preview`:
+**Create flow:**
+1. Open `http://localhost:3000/tenants/new`
+2. Fill all required fields — slug, branding, at least one claim type with SLA
+3. Click Save → button shows "Saving…" → redirects to `/tenants` → new tenant in table
 
-**Test 1 — auto-approval:**
-- Select SafeGuard Insurance, OUTPATIENT, amount 10000, today
-- Expected: green "Auto-approved" badge (10000 < 20000 threshold)
+**Edit flow:**
+1. Click Edit on the new tenant, change company name, click Save → redirects with updated name
 
-**Test 2 — different tiers for same claim across tenants (INPATIENT, 75000):**
-- SafeGuard: assessor (20k–100k), 10 SLA days, email only
-- HealthFirst: senior_assessor (50k–200k), 14 SLA days, email + sms
-- GovHealth: officer (0–100k), 20 SLA days, all channels
+**Validation — no network call on Zod error:**
+1. On `/tenants/new`, clear Company Name, click Save
+2. Inline Zod error appears — no request in DevTools Network tab
 
-**Test 3 — disabled claim type:**
-- Select SafeGuard Insurance, MATERNITY, any amount
-- Expected: red error "Claim type MATERNITY not enabled for this tenant"
+**API error — duplicate slug:**
+1. Try creating with slug `safeguard-insurance` (already exists)
+2. Backend returns 400 → red error banner appears above the form
 
-Expected result: `PreviewPage` contains no `fetch` calls. `ClaimResult` receives a plain object prop and renders it — no hooks or API calls inside it. Switching tenants and resubmitting shows updated results.
+Expected result: `NewTenantPage` and `EditTenantPage` each contain no `fetch` calls. `TenantForm` receives `onSubmit`, `isSubmitting`, and `error` as props; it does not know what API is being called.
 
 ## Time
 
 - **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
-- **Estimate:** 40 min
+- **Estimate:** 30 min

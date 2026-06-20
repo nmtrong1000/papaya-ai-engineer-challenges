@@ -1,45 +1,43 @@
-# MTC-11. Build tenant config form — branding and claim types sections
+# MTC-11. Build admin shell and tenant list page
 
 ## Requirement
 
-The pages at `/tenants/new` and `/tenants/[id]/edit` render a multi-section form with working branding and claim types sections; the edit page pre-fills from a `useTenant` hook; the `TenantForm` component is a pure UI component with no direct API calls.
+The Next.js app has a persistent sidebar layout with navigation links, and `/tenants` renders a table listing all tenants with their name, slug, and action buttons — with data fetching and delete logic isolated in a `useTenantList` hook and the table rendered by a pure `TenantList` component.
 
 ## Approach
 
-Follow the layer-based architecture: `hooks/useTenant.ts` owns the fetch of the existing tenant config for the edit page; `TenantForm` and its section components are pure UI — they receive `defaultValues` via props and manage internal state only through React Hook Form (`useForm` with `zodResolver`). Pages are thin: `/tenants/new` renders the form with empty defaults; `/tenants/[id]/edit` uses the hook to load defaults then renders the form. The `onSubmit` prop is a no-op at this stage — API wiring comes in a later task.
+Follow the layer-based architecture: `hooks/useTenantList.ts` owns all API calls and state (fetch on mount, delete mutation, refetch after delete); `components/TenantList.tsx` is a pure UI component receiving tenants and an `onDelete` callback as props; `app/tenants/page.tsx` is a thin client component that wires the hook to the component. The `apiFetch` wrapper in `lib/api.ts` is the only place that references `NEXT_PUBLIC_API_URL`. All styling uses Tailwind CSS only.
 
 ## Execution Steps
 
-- [ ] Install React Hook Form and Zod resolver in `app/frontend`: `npm install react-hook-form @hookform/resolvers`
-- [ ] Create `app/frontend/hooks/useTenant.ts` — `useTenant(id)` that fetches `GET /tenants/:id` on mount and returns `{ config, loading, error }`
-- [ ] Create `app/frontend/components/TenantForm/index.tsx` — pure UI form wrapper: `useForm<TenantConfig>` with `zodResolver(TenantConfigSchema)` and `defaultValues` prop; renders section components and a submit button that shows "Saving…" when `isSubmitting` is true
-- [ ] Create `app/frontend/components/TenantForm/BrandingSection.tsx` — 4 labeled inputs (Company Name, Logo URL, Primary Color `type="color"`, Secondary Color); shows inline Zod error messages; no API calls
-- [ ] Create `app/frontend/components/TenantForm/ClaimTypesSection.tsx` — 5 checkboxes (OUTPATIENT through OPTICAL); checking a type appends via `useFieldArray`, unchecking removes it; each enabled type expands a sub-form with Required Docs (textarea), Optional Docs (textarea), SLA Days, and Escalate To inputs; shows per-field validation errors
-- [ ] Create `app/frontend/app/tenants/new/page.tsx` — thin `'use client'` component: renders `<TenantForm>` with empty defaults and a no-op `onSubmit`
-- [ ] Create `app/frontend/app/tenants/[id]/edit/page.tsx` — thin `'use client'` component: uses `useTenant(params.id)`, shows loading/error states, passes `config` as `defaultValues` to `<TenantForm>`
+- [ ] Set `NEXT_PUBLIC_API_URL=http://localhost:4000` in `app/frontend/.env.local`
+- [ ] Create `app/frontend/lib/api.ts` — `apiFetch<T>(path, options?)` that prepends `NEXT_PUBLIC_API_URL`, throws on non-ok responses (attaching status and body to the error), and returns parsed JSON; returns `undefined as T` on 204
+- [ ] Create `app/frontend/hooks/useTenantList.ts` — `useTenantList()` with `tenants`, `loading`, `error` state; `fetchTenants` as `useCallback`; `useEffect` on mount; `deleteTenant(id)` that calls DELETE then re-fetches
+- [ ] Create `app/frontend/components/TenantList.tsx` — pure UI table with columns Company Name / Slug / Actions; delete calls `window.confirm` then `onDelete(id)`; empty-state row when list is empty; no fetch calls
+- [ ] Remove Next.js boilerplate from `app/frontend/app/globals.css` — keep only the Tailwind directives
+- [ ] Create `app/frontend/components/Sidebar.tsx` — nav links for `/tenants`, `/preview`, `/diff`; active link highlighted via `usePathname()`; platform name "MTC Admin" at top
+- [ ] Update `app/frontend/app/layout.tsx` — two-column layout with `<Sidebar />` on the left and `{children}` in `<main>`
+- [ ] Create `app/frontend/app/tenants/page.tsx` — thin `'use client'` component: uses `useTenantList()`, renders header with "New Tenant" link and `<TenantList>` component
+- [ ] Create `app/frontend/app/page.tsx` — redirects to `/tenants`
 
 ## How to Test
 
 ```bash
-# Backend running on port 4000 with seeded data
+# Backend running on port 4000 with 3 seeded tenants
 cd challenges/challenge-15-multi-tenant-config/app/frontend
 npm run dev
 ```
 
-Open `http://localhost:3000/tenants/new`:
-- Branding inputs and 5 claim type checkboxes render
-- Checking INPATIENT expands sub-form with required docs, optional docs, SLA days, escalation
-- Clicking Save with empty Company Name shows an inline Zod error; no API call is made
+Open `http://localhost:3000/tenants`:
+- Table shows SafeGuard Insurance, HealthFirst, GovHealth
+- Sidebar shows navigation links; active link is highlighted
+- Delete SafeGuard Insurance → confirm dialog → row disappears
+- Run `npm run db:seed` in backend to restore
 
-Open `http://localhost:3000/tenants/<safeguard-id>/edit`:
-- Page shows loading state briefly then renders form pre-filled with SafeGuard's values
-- Branding name "SafeGuard Insurance", primary color #1D4ED8
-- OUTPATIENT, INPATIENT, DENTAL checked with their sub-forms pre-filled
-
-Expected result: `TenantForm` and section components contain no `fetch` calls. Data fetching for the edit page is entirely inside `useTenant`. The edit page component is < 15 lines.
+Expected result: `TenantsPage` contains no `fetch` calls. `TenantList` contains no `fetch` calls. All data logic is in `useTenantList`.
 
 ## Time
 
 - **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
-- **Estimate:** 40 min
+- **Estimate:** 30 min
