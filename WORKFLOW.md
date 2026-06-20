@@ -241,7 +241,7 @@ If the challenge has no persistence layer (e.g. a pure UI challenge with static 
 
 Break the work into discrete, independently testable tasks. Each task must be completable in one focused session (target 20–60 min each). No task should touch more than one layer of the stack at a time.
 
-**Default strategy: Horizontal Slicing.** Tasks are ordered by technical layer — Infra → Data → UI → Logic → Polish → Deploy. See [`DECOMPOSITION_STRATEGY.md`](./docs/DECOMPOSITION_STRATEGY.md) for the full comparison of strategies (horizontal slicing, vertical slicing, risk-first) and guidance on when to switch away from the default.
+**Default strategy: Horizontal Slicing.** Tasks are ordered by technical layer — Infra → Data → UI → Logic → Polish → Test → Deploy. See [`DECOMPOSITION_STRATEGY.md`](./docs/DECOMPOSITION_STRATEGY.md) for the full comparison of strategies (horizontal slicing, vertical slicing, risk-first) and guidance on when to switch away from the default.
 
 ### Format
 
@@ -260,9 +260,11 @@ The ticket prefix is a short uppercase abbreviation of the challenge name (e.g. 
 | PC-04 | Responsive mobile layout | UI | 30 min |
 | PC-05 | Best-value highlighting logic | Logic | 25 min |
 | PC-06 | Recommended badge calculation | Logic | 20 min |
-| PC-07 | Deploy to Vercel + smoke test | Deploy | 15 min |
+| PC-07 | Write unit tests for Logic layer (PC-05, PC-06) | Test | 30 min |
+| PC-08 | Write integration tests for API routes | Test | 40 min |
+| PC-09 | Deploy to Vercel + smoke test | Deploy | 15 min |
 
-**Total estimate:** 2h 50min
+**Total estimate:** 3h 40min
 ```
 
 ### Rules
@@ -270,9 +272,14 @@ The ticket prefix is a short uppercase abbreviation of the challenge name (e.g. 
 - Before decomposing, read `plans/2.INFRASTRUCTURE.md` and extract every checked `[x]` item. All task scaffolding, tooling, and implementation steps must use only the selected technologies.
 - Order tasks so each one builds on the last — no task should depend on a later task.
 - **No forward references.** A task must not mention, reference, or defer work to any later task. Each task is scoped so that when it is done, every line of code it produces is complete for that scope — no stubs, no placeholders, no "will be replaced in task N." If a feature is not ready yet, exclude it entirely from this task's scope rather than shipping a temporary implementation.
-- **Layer order (horizontal slicing default):** Infra → Data → UI → Logic → Polish → Deploy. Infra and scaffolding always come first; UI structure before UI content; logic before polish; polish before deploy.
+- **Layer order (horizontal slicing default):** Infra → Data → UI → Logic → Polish → Test → Deploy. Infra and scaffolding always come first; UI structure before UI content; logic before polish; polish before deploy. Test always comes before Deploy.
 - **Task names start with a verb.** Write names in the imperative: "Build", "Create", "Implement", "Deploy", "Verify", etc. Never start with a noun phrase (e.g. "Plan data model" → "Create plan data model").
 - Each task must have a single, verifiable acceptance criterion (captured in the task file).
+- **Testing tasks are mandatory and must be planned in Phase 4.** Every challenge must include at least one unit test task and one integration test task:
+  - **Unit test task** — appears immediately after the last Logic/Service layer task. Covers service and utility functions with isolated, in-memory tests. Use Vitest (frontend) or Jest/Vitest (backend).
+  - **Integration test task** — appears immediately before the Deploy task. Covers API routes end-to-end using a real (test) database or an in-memory equivalent (Supertest for Express, Playwright for browser flows).
+  - **Coverage target:** ≥ 60% line coverage across tested modules. Report coverage with `npm run coverage`; the task is not complete until coverage meets the threshold.
+  - Test tasks follow the same naming convention: "Write unit tests for [layer]", "Write integration tests for [scope]".
 
 ### Confirmation
 
@@ -306,6 +313,16 @@ One sentence: what must exist when this task is complete.
 
 2–4 sentences explaining the technical strategy — which files to create/modify,
 which patterns to follow, and any non-obvious decisions.
+
+## Testing Strategy
+
+_(Required for Test layer tasks. Omit for Infra/Data/Deploy tasks.)_
+
+- **Type:** unit | integration
+- **Framework:** Vitest / Jest / Supertest / Playwright
+- **Coverage target:** ≥ 60% line coverage for the module(s) under test
+- **What to test:** [list the key behaviours — inputs, outputs, error cases]
+- **What NOT to test:** [Prisma internals, third-party SDK calls, framework glue]
 
 ## Execution Steps
 
@@ -379,10 +396,11 @@ All commits in this loop land on the `challenge-XX` branch.
 3. Agent commits on challenge-XX: "chore: [TICKET-ID] start — [Task Name]"
 4. Agent executes the steps in order, checking off each as it goes
 5. Agent runs the "How to Test" steps and confirms expected result
-6. Agent runs the quality gate — ALL three must pass before proceeding:
-   - `npm run build`  → no build errors
-   - `npm run test`   → no test failures (skip if no tests exist yet)
-   - `npm run lint`   → no linting or formatting issues
+6. Agent runs the quality gate — ALL must pass before proceeding:
+   - `npm run build`    → no build errors
+   - `npm run test`     → no test failures (required once any test task has been executed; skip only before the first test task)
+   - `npm run coverage` → ≥ 60% line coverage (required on Test layer tasks only)
+   - `npm run lint`     → no linting or formatting issues
    If any check fails, fix it and re-run before moving on.
 7. Agent stops and asks: "[TICKET-ID] — [Task Name] complete. Please review
    the output. Reply 'ok' to log time and move to the next task, or describe
@@ -396,6 +414,13 @@ All commits in this loop land on the `challenge-XX` branch.
    (use fix: or chore: instead of feat: where appropriate per the conventions table)
 10. Move to the next task
 ```
+
+### Testing task rules (Phase 6)
+
+- **After every implementation task** (UI, Logic, Service layers) that completes and gets user 'ok', the agent must create the corresponding unit test task file immediately if it does not already exist, insert it as the next task in the queue, and execute it before any further implementation tasks.
+- **Before the Deploy task**, if no integration test task exists yet, the agent must create one and execute it first.
+- Test tasks follow the same loop as any other task — Time In, execute, quality gate (`npm run test` + `npm run coverage`), stop for user 'ok', Time Out, commit.
+- The "skip if no tests exist" escape hatch does **not** apply to Test layer tasks. A test task that produces no passing tests is not complete.
 
 ### Commit conventions
 
