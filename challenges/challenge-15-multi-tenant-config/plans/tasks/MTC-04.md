@@ -23,13 +23,13 @@ Write `app/backend/prisma/seed.ts`. Open each tenant insert as a Prisma `$transa
 
 ## Execution Steps
 
-- [ ] Create `app/backend/prisma/seed.ts`
-- [ ] Add `"prisma": { "seed": "ts-node --transpile-only prisma/seed.ts" }` to `app/backend/package.json` and add `"db:seed": "npx prisma db seed"` to scripts
-- [ ] Install `ts-node` as a dev dependency in `app/backend` if not already present
-- [ ] Write the seed file — deleteMany all tables in FK-safe order (TenantVersion → CustomField → TenantNotification → ApprovalTier → TenantClaimType → Branding → Tenant → ClaimType), then upsert 5 ClaimType rows
-- [ ] For each of the 3 tenants run a `$transaction`: create Tenant, Branding, TenantClaimType rows (look up ClaimType id by name), ApprovalTier rows (with tierOrder), TenantNotification rows (all 4 events), CustomField rows (with fieldOrder), then create TenantVersion with the VersionConfig snapshot and update `Tenant.currentVersionId`
-- [ ] Run `npm run db:seed` and verify row counts in `npx prisma studio`
-- [ ] Run `npm run db:seed` a second time and verify row counts are unchanged (idempotency check)
+- [x] Create `app/backend/prisma/seed.ts`
+- [x] Add `"prisma": { "seed": "ts-node --transpile-only prisma/seed.ts" }` to `app/backend/package.json` and add `"db:seed": "npx prisma db seed"` to scripts
+- [x] Install `ts-node` as a dev dependency in `app/backend` if not already present
+- [x] Write the seed file — deleteMany all tables in FK-safe order (TenantVersion → CustomField → TenantNotification → ApprovalTier → TenantClaimType → Branding → Tenant → ClaimType), then upsert 5 ClaimType rows
+- [x] For each of the 3 tenants run a `$transaction`: create Tenant, Branding, TenantClaimType rows (look up ClaimType id by name), ApprovalTier rows (with tierOrder), TenantNotification rows (all 4 events), CustomField rows (with fieldOrder), then create TenantVersion with the VersionConfig snapshot and update `Tenant.currentVersionId`
+- [x] Run `npm run db:seed` and verify row counts in `npx prisma studio`
+- [x] Run `npm run db:seed` a second time and verify row counts are unchanged (idempotency check)
 
 ## How to Test
 
@@ -52,5 +52,5 @@ Expected result: All row counts match the table above. Each `Tenant.currentVersi
 ## Time
 
 - **In:** 2026-06-20 10:51:31
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 10:59:16
 - **Estimate:** 30 min
