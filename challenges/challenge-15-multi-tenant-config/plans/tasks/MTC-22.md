@@ -20,8 +20,8 @@ Copy shared content into each consumer: backend gets the Zod schemas (for runtim
 - [x] Update `app/backend/Dockerfile` — change `COPY package*.json ./` to copy only `backend/package.json`; run `npm install` (not `npm ci` from workspace root); remove all shared-related COPY steps
 - [x] Update `app/frontend/vercel.json` — change `installCommand` from `cd .. && npm install` to `npm install`
 - [x] Run `npm run build` in `app/backend` and `npm run build` in `app/frontend` — both must compile clean
-- [ ] Redeploy backend: `fly deploy --config backend/fly.toml --local-only` from `app/backend/`
-- [ ] Redeploy frontend: `vercel --prod` from `app/frontend/`
+- [x] Redeploy backend: `fly deploy --config fly.toml` from `app/backend/`
+- [x] Redeploy frontend: `vercel --prod` from `app/frontend/`
 
 ## How to Test
 
@@ -43,5 +43,5 @@ Expected result: No `app/shared/` directory. No `@mtc/shared` import anywhere. B
 ## Time
 
 - **In:** 2026-06-20 23:20:00
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 17:45:00
 - **Estimate:** 60 min
