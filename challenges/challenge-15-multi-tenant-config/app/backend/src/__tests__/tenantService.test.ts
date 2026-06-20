@@ -123,7 +123,7 @@ describe("tenantService.updateTenant", () => {
   it("updates config and returns tenant", async () => {
     mockRepo.findById.mockResolvedValue(fakeTenant);
 
-    const result = await tenantService.updateTenant("tenant-1", minimalConfig);
+    const _result = await tenantService.updateTenant("tenant-1", minimalConfig);
 
     expect(mockRepo.upsertBranding).toHaveBeenCalled();
     expect(mockRepo.updateCurrentVersionId).toHaveBeenCalled();

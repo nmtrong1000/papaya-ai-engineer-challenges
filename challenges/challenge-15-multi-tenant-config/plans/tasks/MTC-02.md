@@ -19,6 +19,7 @@ The backend uses a **three-layer architecture**: Routes (path definitions only) 
 - [x] Run `npm install` from `app/` root to link the new workspace member
 - [x] Verify the backend starts and `GET /health` returns `{ "status": "ok" }`
 - [x] Verify `@mtc/shared` resolves — add a temporary import, run `npx tsc --noEmit` in `app/backend`, remove the import
+- [x] Add ESLint: install `eslint`, `@eslint/js`, `typescript-eslint`; create `eslint.config.mjs` with `tseslint.configs.recommended` and rules `no-explicit-any: warn`, `no-unused-vars: error` (ignoring `^_` prefix for args and vars); add `"lint": "eslint src"` script; fix any errors surfaced
 
 ## How to Test
 
