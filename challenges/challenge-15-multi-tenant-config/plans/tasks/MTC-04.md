@@ -51,6 +51,6 @@ Expected result: All row counts match the table above. Each `Tenant.currentVersi
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
+- **In:** 2026-06-20 10:51:31
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
 - **Estimate:** 30 min
