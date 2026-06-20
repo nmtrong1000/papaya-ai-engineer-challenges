@@ -1,15 +1,9 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { TenantConfigSchema, NotificationEventEnum, NotificationChannelEnum } from "@mtc/shared";
+import { TenantConfigSchema, NotificationEventEnum, NotificationChannelEnum, NOTIFICATION_EVENT_LABELS } from "@mtc/shared";
 import type { z } from "zod";
 
 type FormValues = z.input<typeof TenantConfigSchema>;
 
-const EVENT_LABELS: Record<string, string> = {
-  claim_submitted: "Claim Submitted",
-  approved:        "Approved",
-  rejected:        "Rejected",
-  payment_sent:    "Payment Sent",
-};
 
 const EVENTS = NotificationEventEnum.options;
 const CHANNELS = NotificationChannelEnum.options;
@@ -42,7 +36,7 @@ export function NotificationsSection() {
                 >
                   <option value="">Select event…</option>
                   {EVENTS.filter((e) => e === selectedEvents[idx] || !selectedEvents.includes(e)).map((e) => (
-                    <option key={e} value={e}>{EVENT_LABELS[e] ?? e}</option>
+                    <option key={e} value={e}>{NOTIFICATION_EVENT_LABELS[e] ?? e}</option>
                   ))}
                 </select>
               </div>

@@ -1,8 +1,9 @@
-import { useFormContext, useFieldArray } from "react-hook-form";
-import { TenantConfigSchema } from "@mtc/shared";
+import { useFormContext, useFieldArray, Controller } from "react-hook-form";
+import { TenantConfigSchema, APPROVER_ROLES } from "@mtc/shared";
 import type { z } from "zod";
 
 type FormValues = z.input<typeof TenantConfigSchema>;
+
 
 export function ApprovalRulesSection() {
   const { register, control, formState: { errors } } = useFormContext<FormValues>();
@@ -64,15 +65,23 @@ export function ApprovalRulesSection() {
             </div>
             <div>
               {idx === 0 && <label className="block text-xs font-medium text-gray-500 mb-1">Approver Role <span className="text-red-500">*</span></label>}
-              <select
-                {...register(`approvalTiers.${idx}.approverRole`)}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">Select role…</option>
-                {["claims_manager","senior_claims_manager","supervisor","manager","director","compliance_officer","medical_reviewer","underwriter"].map((r) => (
-                  <option key={r} value={r}>{r.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}</option>
-                ))}
-              </select>
+              <Controller
+                control={control}
+                name={`approvalTiers.${idx}.approverRole`}
+                render={({ field: f }) => (
+                  <select
+                    value={f.value}
+                    onChange={f.onChange}
+                    onBlur={f.onBlur}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Select role…</option>
+                    {APPROVER_ROLES.map((r) => (
+                      <option key={r.value} value={r.value}>{r.label}</option>
+                    ))}
+                  </select>
+                )}
+              />
               {tierErrors[idx]?.approverRole && <p className="mt-0.5 text-xs text-red-600">{tierErrors[idx].approverRole.message}</p>}
             </div>
             <div className={idx === 0 ? "pt-5" : ""}>

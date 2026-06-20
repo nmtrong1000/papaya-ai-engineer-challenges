@@ -1,5 +1,5 @@
 import { useFormContext, useFieldArray, Controller } from "react-hook-form";
-import { TenantConfigSchema, ClaimTypeEnum } from "@mtc/shared";
+import { TenantConfigSchema, ClaimTypeEnum, ESCALATION_ROLES } from "@mtc/shared";
 import type { z } from "zod";
 import { DocTagInput } from "@/components/TenantForm/DocTagInput";
 
@@ -8,16 +8,6 @@ type FormValues = z.input<typeof TenantConfigSchema>;
 const ALL_TYPES = ClaimTypeEnum.options;
 type ClaimType = (typeof ALL_TYPES)[number];
 
-const ESCALATION_ROLES = [
-  { value: "claims_manager",      label: "Claims Manager" },
-  { value: "senior_claims_manager", label: "Senior Claims Manager" },
-  { value: "supervisor",          label: "Supervisor" },
-  { value: "manager",             label: "Manager" },
-  { value: "director",            label: "Director" },
-  { value: "compliance_officer",  label: "Compliance Officer" },
-  { value: "medical_reviewer",    label: "Medical Reviewer" },
-  { value: "underwriter",         label: "Underwriter" },
-];
 
 export function ClaimTypesSection() {
   const { register, control, watch, formState: { errors } } = useFormContext<FormValues>();
@@ -94,15 +84,23 @@ export function ClaimTypesSection() {
                     <label className="block text-xs font-medium text-gray-600 mb-1">
                       Escalate To <span className="text-red-500">*</span>
                     </label>
-                    <select
-                      {...register(`claimTypes.${idx}.escalateTo`)}
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="">Select role…</option>
-                      {ESCALATION_ROLES.map((r) => (
-                        <option key={r.value} value={r.value}>{r.label}</option>
-                      ))}
-                    </select>
+                    <Controller
+                      control={control}
+                      name={`claimTypes.${idx}.escalateTo`}
+                      render={({ field: f }) => (
+                        <select
+                          value={f.value}
+                          onChange={f.onChange}
+                          onBlur={f.onBlur}
+                          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="">Select role…</option>
+                          {ESCALATION_ROLES.map((r) => (
+                            <option key={r.value} value={r.value}>{r.label}</option>
+                          ))}
+                        </select>
+                      )}
+                    />
                     {errs?.escalateTo && <p className="mt-1 text-xs text-red-600">{errs.escalateTo.message}</p>}
                   </div>
                 </div>

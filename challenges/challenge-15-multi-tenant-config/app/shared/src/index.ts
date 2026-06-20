@@ -1,6 +1,7 @@
 export * from "./schemas/tenant";
 export * from "./schemas/version";
 export * from "./schemas/claim";
+export * from "./constants";
 
 import type { z } from "zod";
 import type { TenantConfigSchema } from "./schemas/tenant";

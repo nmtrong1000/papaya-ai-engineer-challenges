@@ -1,24 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-
-export const INSURANCE_DOCS = [
-  { key: "admission_record",     label: "Admission Record" },
-  { key: "dental_receipt",       label: "Dental Receipt" },
-  { key: "diagnosis_note",       label: "Diagnosis Note" },
-  { key: "discharge_summary",    label: "Discharge Summary" },
-  { key: "doctors_report",       label: "Doctor's Report" },
-  { key: "itemized_bill",        label: "Itemized Bill" },
-  { key: "lab_results",          label: "Lab Results" },
-  { key: "maternity_certificate",label: "Maternity Certificate" },
-  { key: "medical_receipt",      label: "Medical Receipt" },
-  { key: "optical_prescription", label: "Optical Prescription" },
-  { key: "pharmacy_receipt",     label: "Pharmacy Receipt" },
-  { key: "referral_letter",      label: "Referral Letter" },
-  { key: "specialist_report",    label: "Specialist Report" },
-  { key: "treatment_plan",       label: "Treatment Plan" },
-  { key: "xray_images",          label: "X-Ray Images" },
-];
+import { INSURANCE_DOCS } from "@mtc/shared";
 
 type Props = {
   value: string[];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm, FormProvider } from "react-hook-form";
+import { useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TenantConfigSchema } from "@mtc/shared";
 import type { TenantConfig } from "@mtc/shared";
@@ -15,7 +16,10 @@ type FormValues = z.input<typeof TenantConfigSchema>;
 
 type Props = {
   defaultValues?: Partial<TenantConfig>;
-  onSubmit: (data: TenantConfig) => Promise<void>;
+  slug?: string;
+  isEditMode?: boolean;
+  onSubmit: (data: TenantConfig, slug: string) => Promise<void>;
+  error?: string | null;
   extraSections?: React.ReactNode;
 };
 
@@ -28,23 +32,49 @@ const emptyDefaults: FormValues = {
   customFields: [],
 };
 
-export function TenantForm({ defaultValues, onSubmit, extraSections }: Props) {
+export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode = false, onSubmit, error, extraSections }: Props) {
   const methods = useForm<FormValues>({
     resolver: zodResolver(TenantConfigSchema),
     defaultValues: { ...emptyDefaults, ...defaultValues },
   });
 
   const { handleSubmit, formState: { isSubmitting } } = methods;
+  const slugRef = useRef(initialSlug);
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit((data) => onSubmit(data as unknown as TenantConfig))} className="space-y-8">
+      {error && (
+        <div className="mb-4 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+      <form onSubmit={handleSubmit((data) => onSubmit(data as unknown as TenantConfig, slugRef.current))} className="space-y-8">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Slug <span className="text-red-500">*</span>
+          </label>
+          {isEditMode ? (
+            <p className="text-sm text-gray-500 font-mono bg-gray-50 border border-gray-200 rounded-md px-3 py-2">{initialSlug}</p>
+          ) : (
+            <input
+              name="slug"
+              defaultValue={initialSlug}
+              pattern="[a-z0-9-]+"
+              placeholder="e.g. acme-insurance"
+              onChange={(e) => { slugRef.current = e.target.value; }}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          )}
+          <p className="mt-1 text-xs text-gray-400">Lowercase letters, numbers, and hyphens only. Cannot be changed after creation.</p>
+        </div>
+
         <BrandingSection />
         <ClaimTypesSection />
         <ApprovalRulesSection />
         <NotificationsSection />
         <CustomFieldsSection />
         {extraSections}
+
         <div className="pt-2">
           <button
             type="submit"
@@ -58,3 +88,4 @@ export function TenantForm({ defaultValues, onSubmit, extraSections }: Props) {
     </FormProvider>
   );
 }
+
