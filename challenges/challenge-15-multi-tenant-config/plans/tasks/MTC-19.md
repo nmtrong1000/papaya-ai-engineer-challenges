@@ -10,18 +10,18 @@ Add a multi-stage `Dockerfile` to `app/backend` — the builder stage copies `pr
 
 ## Execution Steps
 
-- [ ] Verify TypeScript builds cleanly: run `npm run build` in `app/backend` and fix any errors
-- [ ] Ensure `"start": "node dist/index.js"` exists in `app/backend/package.json` scripts
-- [ ] Update `app/backend/src/app.ts` to allow multiple CORS origins — `['http://localhost:3000', process.env.CORS_ORIGIN].filter(Boolean)`
-- [ ] Create `app/backend/Dockerfile` — multi-stage: builder installs deps, copies prisma + src, runs `prisma generate` + `npm run build`; runtime copies dist and node_modules, exposes port 4000, runs `node dist/index.js`
-- [ ] Create `app/backend/.dockerignore` — exclude node_modules, .env, src, *.md
-- [ ] Install the Fly CLI if not already installed: `brew install flyctl`
-- [ ] Log in to Fly: `fly auth login`
-- [ ] Run `fly launch` from `app/backend` — choose app name and region, select NO when asked to deploy now
-- [ ] Set `internal_port = 4000` in `fly.toml` under `[http_service]`
-- [ ] Set Fly secrets: `fly secrets set DATABASE_URL="<neon-url>" CORS_ORIGIN="<placeholder>"`
-- [ ] Deploy: `fly deploy` from `app/backend` and note the `*.fly.dev` URL
-- [ ] Smoke test `GET /health` and `GET /tenants` against the live URL
+- [x] Verify TypeScript builds cleanly: run `npm run build` in `app/backend` and fix any errors
+- [x] Ensure `"start": "node dist/index.js"` exists in `app/backend/package.json` scripts
+- [x] Update `app/backend/src/app.ts` to allow multiple CORS origins — `['http://localhost:3000', process.env.CORS_ORIGIN].filter(Boolean)`
+- [x] Create `app/backend/Dockerfile` — multi-stage: builder copies workspace root + shared + backend, builds shared then backend; runtime stage copies compiled output; deploy from `app/` root with `fly deploy --config backend/fly.toml --local-only`
+- [x] Create `app/backend/.dockerignore` — exclude node_modules, dist, .env, *.md
+- [x] Install the Fly CLI if not already installed: `brew install flyctl`
+- [x] Log in to Fly: `fly auth login`
+- [x] Run `fly launch` from `app/backend` — chose mtc-backend, region sin, skipped MPG cluster
+- [x] Set `internal_port = 4000` in `fly.toml` under `[http_service]`
+- [x] Set Fly secrets: `fly secrets set DATABASE_URL="<neon-url>"`
+- [x] Deploy: `fly deploy --config backend/fly.toml --local-only` from `app/` — live at https://mtc-backend.fly.dev
+- [x] Smoke test `GET /health` and `GET /tenants` against the live URL — both passing
 
 ## How to Test
 
@@ -39,6 +39,6 @@ Expected result: Backend is live. All 3 seeded tenants returned by `GET /tenants
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **In:** 2026-06-20 18:50:00
+- **Out:** 2026-06-20 20:10:00
 - **Estimate:** 30 min

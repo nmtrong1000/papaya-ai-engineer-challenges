@@ -10,7 +10,8 @@ import processClaimRouter from "./routes/processClaim";
 const app = express();
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:3000" }));
+const allowedOrigins = ["http://localhost:3000", process.env.CORS_ORIGIN].filter(Boolean) as string[];
+app.use(cors({ origin: allowedOrigins }));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
