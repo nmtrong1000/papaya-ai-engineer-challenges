@@ -1,5 +1,6 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { TenantConfigSchema, NotificationEventEnum, NotificationChannelEnum, NOTIFICATION_EVENT_LABELS } from "@mtc/shared";
+import { TenantConfigSchema, NotificationEventEnum, NotificationChannelEnum } from "@/lib/shared";
+import { NOTIFICATION_EVENT_LABELS } from "@/lib/constants";
 import type { z } from "zod";
 
 type FormValues = z.input<typeof TenantConfigSchema>;

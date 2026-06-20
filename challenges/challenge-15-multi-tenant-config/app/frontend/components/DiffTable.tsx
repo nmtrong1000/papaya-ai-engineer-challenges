@@ -1,4 +1,5 @@
-import { ClaimTypeEnum, NOTIFICATION_EVENT_LABELS } from "@mtc/shared";
+import { ClaimTypeEnum } from "@/lib/shared";
+import { NOTIFICATION_EVENT_LABELS } from "@/lib/constants";
 import { DiffRow } from "./DiffRow";
 import type { TenantDetail } from "@/hooks/useTenant";
 

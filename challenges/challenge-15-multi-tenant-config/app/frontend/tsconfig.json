@@ -19,8 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"],
-      "@mtc/shared": ["../shared/src/index.ts"]
+      "@/*": ["./*"]
     }
   },
   "include": [

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTenantList } from "@/hooks/useTenantList";
 import { useProcessClaim } from "@/hooks/useProcessClaim";
 import { ClaimResult } from "@/components/ClaimResult";
-import { ClaimTypeEnum } from "@mtc/shared";
+import { ClaimTypeEnum } from "@/lib/shared";
 
 const today = () => new Date().toISOString().slice(0, 10);
 

@@ -1,5 +1,6 @@
 import { useFormContext, useFieldArray, Controller } from "react-hook-form";
-import { TenantConfigSchema, APPROVER_ROLES } from "@mtc/shared";
+import { TenantConfigSchema } from "@/lib/shared";
+import { APPROVER_ROLES } from "@/lib/constants";
 import type { z } from "zod";
 
 type FormValues = z.input<typeof TenantConfigSchema>;

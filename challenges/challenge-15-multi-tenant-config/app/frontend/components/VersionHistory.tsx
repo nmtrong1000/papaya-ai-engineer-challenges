@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { TenantVersion } from "@/hooks/useVersionHistory";
-import type { TenantConfig } from "@mtc/shared";
+import type { TenantConfig } from "@/lib/shared";
 import { TenantForm } from "@/components/TenantForm";
 
 type Props = {

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { apiFetch } from "@/lib/api";
-import type { ProcessClaimResult } from "@mtc/shared";
+import type { ProcessClaimResult } from "@/lib/shared";
 
 type ClaimPayload = {
   claimType: string;

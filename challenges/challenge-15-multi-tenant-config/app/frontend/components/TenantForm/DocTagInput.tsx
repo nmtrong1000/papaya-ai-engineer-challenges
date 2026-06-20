@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { INSURANCE_DOCS } from "@mtc/shared";
+import { INSURANCE_DOCS } from "@/lib/constants";
 
 type Props = {
   value: string[];

@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { TenantConfigSchema } from "@mtc/shared";
+import { TenantConfigSchema } from "@/lib/shared";
 import type { z } from "zod";
 
 type FormValues = z.input<typeof TenantConfigSchema>;

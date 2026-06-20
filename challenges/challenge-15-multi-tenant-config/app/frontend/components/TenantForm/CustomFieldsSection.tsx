@@ -1,5 +1,5 @@
 import { useFormContext, useFieldArray, Controller } from "react-hook-form";
-import { TenantConfigSchema, CustomFieldTypeEnum } from "@mtc/shared";
+import { TenantConfigSchema, CustomFieldTypeEnum } from "@/lib/shared";
 import type { z } from "zod";
 
 type FormValues = z.input<typeof TenantConfigSchema>;

@@ -1,5 +1,5 @@
-import type { ProcessClaimResult } from "@mtc/shared";
-import { INSURANCE_DOCS, NOTIFICATION_EVENT_LABELS } from "@mtc/shared";
+import type { ProcessClaimResult } from "@/lib/shared";
+import { INSURANCE_DOCS, NOTIFICATION_EVENT_LABELS } from "@/lib/constants";
 
 type Props = { result: ProcessClaimResult };
 

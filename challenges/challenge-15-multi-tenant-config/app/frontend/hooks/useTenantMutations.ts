@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch } from "@/lib/api";
-import type { TenantConfig } from "@mtc/shared";
+import type { TenantConfig } from "@/lib/shared";
 
 type MutationState = { submitting: boolean; error: string | null };
 

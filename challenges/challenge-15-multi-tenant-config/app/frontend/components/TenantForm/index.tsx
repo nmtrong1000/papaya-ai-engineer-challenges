@@ -3,8 +3,8 @@
 import { useForm, FormProvider } from "react-hook-form";
 import { useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TenantConfigSchema } from "@mtc/shared";
-import type { TenantConfig } from "@mtc/shared";
+import { TenantConfigSchema } from "@/lib/shared";
+import type { TenantConfig } from "@/lib/shared";
 import type { z } from "zod";
 import { BrandingSection } from "@/components/TenantForm/BrandingSection";
 import { ClaimTypesSection } from "@/components/TenantForm/ClaimTypesSection";

@@ -1,5 +1,6 @@
 import { useFormContext, useFieldArray, Controller } from "react-hook-form";
-import { TenantConfigSchema, ClaimTypeEnum, ESCALATION_ROLES } from "@mtc/shared";
+import { TenantConfigSchema, ClaimTypeEnum } from "@/lib/shared";
+import { ESCALATION_ROLES } from "@/lib/constants";
 import type { z } from "zod";
 import { DocTagInput } from "@/components/TenantForm/DocTagInput";
 

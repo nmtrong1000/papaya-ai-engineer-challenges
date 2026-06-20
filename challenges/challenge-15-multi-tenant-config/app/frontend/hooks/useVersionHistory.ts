@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { apiFetch } from "@/lib/api";
-import type { TenantConfig } from "@mtc/shared";
+import type { TenantConfig } from "@/lib/shared";
 
 export type TenantVersion = {
   id: string;
