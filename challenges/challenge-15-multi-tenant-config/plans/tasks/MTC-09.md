@@ -18,12 +18,12 @@
 
 ## Execution Steps
 
-- [ ] Create `app/backend/src/lib/businessDays.ts` — `addBusinessDays(date, days)` that increments the date one day at a time, skipping Saturdays (day 6) and Sundays (day 0)
-- [ ] Create `app/backend/src/services/claimService.ts` — pure `processClaim(config, data)` function with no Prisma imports; throws `{ status: 400 }` if claim type not enabled; returns the full `ProcessClaimResult`
-- [ ] Create `app/backend/src/controllers/claimController.ts` — parse body with `ClaimDataSchema` (return 400 on failure), load tenant via `TenantService.getTenantById`, call `ClaimService.processClaim`, return result as JSON; wrap in try/catch → next(err)
-- [ ] Create `app/backend/src/routes/processClaim.ts` — Router with `mergeParams: true`; POST /:id/process-claim
-- [ ] Mount the process-claim router in `app.ts`: `app.use('/tenants', processClaimRouter)`
-- [ ] Smoke test against all 3 seeded tenants to verify different approvalTier, slaDueDate, and notifications per claim
+- [x] Create `app/backend/src/lib/businessDays.ts` — `addBusinessDays(date, days)` that increments the date one day at a time, skipping Saturdays (day 6) and Sundays (day 0)
+- [x] Create `app/backend/src/services/claimService.ts` — pure `processClaim(config, data)` function with no Prisma imports; throws `{ status: 400 }` if claim type not enabled; returns the full `ProcessClaimResult`
+- [x] Create `app/backend/src/controllers/claimController.ts` — parse body with `ClaimDataSchema` (return 400 on failure), load tenant via `TenantService.getTenantById`, call `ClaimService.processClaim`, return result as JSON; wrap in try/catch → next(err)
+- [x] Create `app/backend/src/routes/processClaim.ts` — Router with `mergeParams: true`; POST /:id/process-claim
+- [x] Mount the process-claim router in `app.ts`: `app.use('/tenants', processClaimRouter)`
+- [x] Smoke test against all 3 seeded tenants to verify different approvalTier, slaDueDate, and notifications per claim
 
 ## How to Test
 
@@ -57,5 +57,5 @@ Expected result: The 3 seeded tenants produce different `approvalTier`, `slaDueD
 ## Time
 
 - **In:** 2026-06-20 11:53:34
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 12:00:32
 - **Estimate:** 30 min
