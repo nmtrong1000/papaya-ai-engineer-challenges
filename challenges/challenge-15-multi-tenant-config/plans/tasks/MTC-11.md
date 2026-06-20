@@ -10,15 +10,15 @@ Follow the layer-based architecture: `hooks/useTenantList.ts` owns all API calls
 
 ## Execution Steps
 
-- [ ] Set `NEXT_PUBLIC_API_URL=http://localhost:4000` in `app/frontend/.env.local`
-- [ ] Create `app/frontend/lib/api.ts` — `apiFetch<T>(path, options?)` that prepends `NEXT_PUBLIC_API_URL`, throws on non-ok responses (attaching status and body to the error), and returns parsed JSON; returns `undefined as T` on 204
-- [ ] Create `app/frontend/hooks/useTenantList.ts` — `useTenantList()` with `tenants`, `loading`, `error` state; `fetchTenants` as `useCallback`; `useEffect` on mount; `deleteTenant(id)` that calls DELETE then re-fetches
-- [ ] Create `app/frontend/components/TenantList.tsx` — pure UI table with columns Company Name / Slug / Actions; delete calls `window.confirm` then `onDelete(id)`; empty-state row when list is empty; no fetch calls
-- [ ] Remove Next.js boilerplate from `app/frontend/app/globals.css` — keep only the Tailwind directives
-- [ ] Create `app/frontend/components/Sidebar.tsx` — nav links for `/tenants`, `/preview`, `/diff`; active link highlighted via `usePathname()`; platform name "MTC Admin" at top
-- [ ] Update `app/frontend/app/layout.tsx` — two-column layout with `<Sidebar />` on the left and `{children}` in `<main>`
-- [ ] Create `app/frontend/app/tenants/page.tsx` — thin `'use client'` component: uses `useTenantList()`, renders header with "New Tenant" link and `<TenantList>` component
-- [ ] Create `app/frontend/app/page.tsx` — redirects to `/tenants`
+- [x] Set `NEXT_PUBLIC_API_URL=http://localhost:4000` in `app/frontend/.env.local`
+- [x] Create `app/frontend/lib/api.ts` — `apiFetch<T>(path, options?)` that prepends `NEXT_PUBLIC_API_URL`, throws on non-ok responses (attaching status and body to the error), and returns parsed JSON; returns `undefined as T` on 204
+- [x] Create `app/frontend/hooks/useTenantList.ts` — `useTenantList()` with `tenants`, `loading`, `error` state; `fetchTenants` as `useCallback`; `useEffect` on mount; `deleteTenant(id)` that calls DELETE then re-fetches
+- [x] Create `app/frontend/components/TenantList.tsx` — pure UI table with columns Company Name / Slug / Actions; delete calls `window.confirm` then `onDelete(id)`; empty-state row when list is empty; no fetch calls
+- [x] Remove Next.js boilerplate from `app/frontend/app/globals.css` — keep only the Tailwind directives
+- [x] Create `app/frontend/components/Sidebar.tsx` — nav links for `/tenants`, `/preview`, `/diff`; active link highlighted via `usePathname()`; platform name "MTC Admin" at top
+- [x] Update `app/frontend/app/layout.tsx` — two-column layout with `<Sidebar />` on the left and `{children}` in `<main>`
+- [x] Create `app/frontend/app/tenants/page.tsx` — thin `'use client'` component: uses `useTenantList()`, renders header with "New Tenant" link and `<TenantList>` component
+- [x] Create `app/frontend/app/page.tsx` — redirects to `/tenants`
 
 ## How to Test
 
@@ -39,5 +39,5 @@ Expected result: `TenantsPage` contains no `fetch` calls. `TenantList` contains 
 ## Time
 
 - **In:** 2026-06-20 12:06:07
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 12:16:13
 - **Estimate:** 30 min

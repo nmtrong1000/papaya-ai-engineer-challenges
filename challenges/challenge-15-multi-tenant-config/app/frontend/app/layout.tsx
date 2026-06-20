@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { Sidebar } from "../components/Sidebar";
 
 export const metadata: Metadata = {
   title: "MTC Admin",
@@ -12,8 +13,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="en" className="h-full">
+      <body className="h-full flex antialiased bg-gray-50 text-gray-900">
+        <Sidebar />
+        <main className="flex-1 overflow-y-auto">{children}</main>
+      </body>
     </html>
   );
 }
