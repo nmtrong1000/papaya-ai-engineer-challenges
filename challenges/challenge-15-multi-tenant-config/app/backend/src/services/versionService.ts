@@ -15,6 +15,16 @@ export const versionService = {
     return versionRepository.findByTenantId(tenantId);
   },
 
+  getVersion: async (tenantId: string, targetVersion: number) => {
+    const tenant = await tenantRepository.findById(tenantId);
+    if (!tenant) throw notFound("Tenant not found");
+    const snapshot = await versionRepository.findByTenantAndVersion(tenantId, targetVersion);
+    if (!snapshot) throw notFound(`Version ${targetVersion} not found`);
+    const versionConfig = migrateConfig(snapshot.config);
+    const { schemaVersion: _schema, ...config } = versionConfig;
+    return { version: snapshot.version, note: snapshot.note, createdAt: snapshot.createdAt, config };
+  },
+
   rollback: async (tenantId: string, targetVersion: number) => {
     const tenant = await tenantRepository.findById(tenantId);
     if (!tenant) throw notFound("Tenant not found");

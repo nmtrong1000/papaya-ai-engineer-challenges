@@ -9,7 +9,7 @@ export type TenantDetail = TenantConfig & {
   slug: string;
 };
 
-export function useTenant(id: string) {
+export function useTenant(id: string, _key = 0) {
   const [config, setConfig] = useState<TenantDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +49,7 @@ export function useTenant(id: string) {
       })
       .catch((err: any) => setError(err.message ?? "Failed to load tenant"))
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, _key]);
 
   return { config, loading, error };
 }

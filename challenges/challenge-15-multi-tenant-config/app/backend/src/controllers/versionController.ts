@@ -12,6 +12,19 @@ export const versionController = {
     }
   },
 
+  getVersion: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const version = parseInt(req.params.version, 10);
+      if (isNaN(version)) {
+        return res.status(400).json({ error: { code: ErrorCode.INVALID_VERSION, message: ErrorMessage.INVALID_VERSION } });
+      }
+      const result = await versionService.getVersion(req.params.id, version);
+      res.json({ data: result });
+    } catch (err) {
+      next(err);
+    }
+  },
+
   rollback: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const version = parseInt(req.params.version, 10);

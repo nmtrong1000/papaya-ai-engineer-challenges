@@ -18,9 +18,10 @@ type Props = {
   defaultValues?: Partial<TenantConfig>;
   slug?: string;
   isEditMode?: boolean;
-  onSubmit: (data: TenantConfig, slug: string) => Promise<void>;
+  onSubmit?: (data: TenantConfig, slug: string) => Promise<void>;
   error?: string | null;
   extraSections?: React.ReactNode;
+  readOnly?: boolean;
 };
 
 const emptyDefaults: FormValues = {
@@ -32,7 +33,7 @@ const emptyDefaults: FormValues = {
   customFields: [],
 };
 
-export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode = false, onSubmit, error, extraSections }: Props) {
+export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode = false, onSubmit, error, extraSections, readOnly = false }: Props) {
   const methods = useForm<FormValues>({
     resolver: zodResolver(TenantConfigSchema),
     defaultValues: { ...emptyDefaults, ...defaultValues },
@@ -48,12 +49,17 @@ export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode =
           {error}
         </div>
       )}
-      <form onSubmit={handleSubmit((data) => onSubmit(data as unknown as TenantConfig, slugRef.current))} className="space-y-8">
+      <form
+        onSubmit={readOnly || !onSubmit
+          ? (e) => e.preventDefault()
+          : handleSubmit((data) => onSubmit(data as unknown as TenantConfig, slugRef.current))}
+        className="space-y-8"
+      >
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Slug <span className="text-red-500">*</span>
+            Slug {!readOnly && <span className="text-red-500">*</span>}
           </label>
-          {isEditMode ? (
+          {isEditMode || readOnly ? (
             <p className="text-sm text-gray-500 font-mono bg-gray-50 border border-gray-200 rounded-md px-3 py-2">{initialSlug}</p>
           ) : (
             <input
@@ -65,25 +71,29 @@ export function TenantForm({ defaultValues, slug: initialSlug = "", isEditMode =
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           )}
-          <p className="mt-1 text-xs text-gray-400">Lowercase letters, numbers, and hyphens only. Cannot be changed after creation.</p>
+          {!readOnly && <p className="mt-1 text-xs text-gray-400">Lowercase letters, numbers, and hyphens only. Cannot be changed after creation.</p>}
         </div>
 
-        <BrandingSection />
-        <ClaimTypesSection />
-        <ApprovalRulesSection />
-        <NotificationsSection />
-        <CustomFieldsSection />
-        {extraSections}
+        <fieldset disabled={readOnly} className="space-y-8 border-0 p-0 m-0 min-w-0">
+          <BrandingSection />
+          <ClaimTypesSection />
+          <ApprovalRulesSection />
+          <NotificationsSection />
+          <CustomFieldsSection />
+          {extraSections}
+        </fieldset>
 
-        <div className="pt-2">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors"
-          >
-            {isSubmitting ? "Saving…" : "Save"}
-          </button>
-        </div>
+        {!readOnly && (
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            >
+              {isSubmitting ? "Saving…" : "Save"}
+            </button>
+          </div>
+        )}
       </form>
     </FormProvider>
   );

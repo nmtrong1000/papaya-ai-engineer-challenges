@@ -10,10 +10,10 @@ Follow the layer-based architecture: `hooks/useVersionHistory.ts` owns `GET /ten
 
 ## Execution Steps
 
-- [ ] Create `app/frontend/hooks/useVersionHistory.ts` — `useVersionHistory(tenantId)` that fetches `GET /tenants/:id/versions` on mount; exposes `rollback(version)` that calls `POST /tenants/:id/rollback/:version`, re-fetches the list, and returns the new version number; returns `{ versions, loading, error, rollback }`
-- [ ] Create `app/frontend/components/VersionHistory.tsx` — pure UI table (Version # / Created At / Note / Action); "Roll back" button disabled for the row with the highest version number (current version); on click: `window.confirm`, call `onRollback(version)`, call `onRollbackSuccess(newVersion)` on resolution; show a dismissible green success banner "Rolled back to version N. New version M created."; format `createdAt` as a readable locale string
-- [ ] Add `tab` state (`'edit' | 'history'`, default `'edit'`) to `app/frontend/app/tenants/[id]/edit/page.tsx` with two tab buttons
-- [ ] Compose both tabs in the edit page using `useVersionHistory(params.id)` and the existing `useTenant` + `useUpdateTenant` hooks; on rollback success, increment `configKey` to trigger `useTenant` re-fetch; pass updated config to `TenantForm` via `defaultValues`
+- [x] Create `app/frontend/hooks/useVersionHistory.ts` — `useVersionHistory(tenantId)` that fetches `GET /tenants/:id/versions` on mount; exposes `rollback(version)` that calls `POST /tenants/:id/rollback/:version`, re-fetches the list, and returns the new version number; returns `{ versions, loading, error, rollback }`
+- [x] Create `app/frontend/components/VersionHistory.tsx` — pure UI table (Version # / Created At / Note / Action); "Roll back" button disabled for the row with the highest version number (current version); version cell and Roll back button both open a review modal with `TenantForm readOnly`; confirm button triggers rollback; show a dismissible green success banner "Rolled back to version N. New version M created."; format `createdAt` as a readable locale string
+- [x] Add `tab` state (`'edit' | 'history'`, default `'edit'`) to `app/frontend/app/tenants/[id]/edit/page.tsx` with two tab buttons
+- [x] Compose both tabs in the edit page using `useVersionHistory(params.id)` and the existing `useTenant` + `useUpdateTenant` hooks; on rollback success, increment `configKey` to trigger `useTenant` re-fetch; pass updated config to `TenantForm` via `defaultValues`
 
 ## How to Test
 
@@ -41,6 +41,6 @@ Expected result: `EditTenantPage` orchestrates the two hooks but makes no direct
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **In:** 2026-06-20 17:11:00
+- **Out:** 2026-06-20 18:15:00
 - **Estimate:** 35 min
