@@ -22,12 +22,12 @@ Use Vitest as the test runner and `vi.mock` to stub the Prisma singleton (`src/l
 
 ## Execution Steps
 
-- [ ] Install Vitest and coverage plugin in `app/backend`: `npm install -D vitest @vitest/coverage-v8`
-- [ ] Add `"test": "vitest run"` and `"coverage": "vitest run --coverage"` scripts to `app/backend/package.json`
-- [ ] Add a `vitest.config.ts` at `app/backend/vitest.config.ts` — point `include` at `src/__tests__/**/*.test.ts`, enable `coverage.reporter = ['text', 'lcov']`, set `coverage.include = ['src/services/**']`
-- [ ] Create `app/backend/src/__tests__/claimService.test.ts` — mock `tenantRepository` and `configCache`; write tests for all `processClaim` branches (auto-approve, tier selection, SLA, docs, notifications)
-- [ ] Create `app/backend/src/__tests__/tenantService.test.ts` — mock `tenantRepository` and `configCache`; test cache-hit, cache-miss, 404 throw, listTenants, deleteTenant cache invalidation
-- [ ] Run `npm run coverage` in `app/backend` and confirm ≥ 60% line coverage reported for both service files
+- [x] Install Vitest and coverage plugin in `app/backend`: `npm install -D vitest @vitest/coverage-v8`
+- [x] Add `"test": "vitest run"` and `"coverage": "vitest run --coverage"` scripts to `app/backend/package.json`
+- [x] Add a `vitest.config.ts` at `app/backend/vitest.config.ts` — point `include` at `src/__tests__/**/*.test.ts`, enable `coverage.reporter = ['text', 'lcov']`, set `coverage.include = ['src/services/**']`
+- [x] Create `app/backend/src/__tests__/claimService.test.ts` — mock `tenantRepository` and `configCache`; write tests for all `processClaim` branches (auto-approve, tier selection, SLA, docs, notifications)
+- [x] Create `app/backend/src/__tests__/tenantService.test.ts` — mock `tenantRepository` and `configCache`; test cache-hit, cache-miss, 404 throw, listTenants, deleteTenant cache invalidation
+- [x] Run `npm run coverage` in `app/backend` and confirm ≥ 60% line coverage reported for both service files
 
 ## How to Test
 
@@ -45,5 +45,5 @@ Expected result: All tests green. Coverage threshold met. No TypeScript errors.
 ## Time
 
 - **In:** 2026-06-20 12:00:32
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 12:06:07
 - **Estimate:** 40 min
