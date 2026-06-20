@@ -10,10 +10,10 @@ Follow the layer-based architecture: `hooks/useProcessClaim.ts` owns the POST ca
 
 ## Execution Steps
 
-- [ ] Create `app/frontend/hooks/useProcessClaim.ts` — `useProcessClaim()` with `result`, `loading`, `error` state and a `submit(tenantId, claimData)` function that clears state, calls `POST /tenants/:id/process-claim`, and sets result or error
-- [ ] Create `app/frontend/components/ClaimResult.tsx` — pure UI component receiving `ProcessClaimResult` as a prop; renders sections: Required Documents (`<ul>`), Optional Documents (`<ul>`), Approval (green "Auto-approved" badge or tier amount range + approver role), Notifications (table: Event / Channels / Template), SLA Due Date, Custom Fields (table or "None"); no fetch calls
-- [ ] Create `app/frontend/app/preview/page.tsx` — thin `'use client'` component: uses `useTenantList()` for tenant dropdown, `useProcessClaim()` for submission; renders a claim form (claimType select with 5 options, amount number input, submissionDate date input defaulting to today) and `<ClaimResult>` when result is available; shows loading spinner or error message
-- [ ] Add "Preview" link to `app/frontend/components/Sidebar.tsx`
+- [x] Create `app/frontend/hooks/useProcessClaim.ts` — `useProcessClaim()` with `result`, `loading`, `error` state and a `submit(tenantId, claimData)` function that clears state, calls `POST /tenants/:id/process-claim`, and sets result or error
+- [x] Create `app/frontend/components/ClaimResult.tsx` — pure UI component receiving `ProcessClaimResult` as a prop; renders sections: Required Documents (`<ul>`), Optional Documents (`<ul>`), Approval (green "Auto-approved" badge or tier amount range + approver role), Notifications (table: Event / Channels / Template), SLA Due Date, Custom Fields (table or "None"); no fetch calls
+- [x] Create `app/frontend/app/preview/page.tsx` — thin `'use client'` component: uses `useTenantList()` for tenant dropdown, `useProcessClaim()` for submission; renders a claim form (claimType select with 5 options, amount number input, submissionDate date input defaulting to today) and `<ClaimResult>` when result is available; shows loading spinner or error message
+- [x] Add "Preview" link to `app/frontend/components/Sidebar.tsx`
 
 ## How to Test
 
@@ -41,5 +41,5 @@ Expected result: `PreviewPage` contains no `fetch` calls. `ClaimResult` receives
 ## Time
 
 - **In:** 2026-06-20 14:08:55
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 16:42:00
 - **Estimate:** 40 min
