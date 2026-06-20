@@ -18,16 +18,16 @@ This task only creates the scaffold; the `hooks/` and `components/` directories 
 
 ## Execution Steps
 
-- [ ] Create `app/` directory and `app/package.json` as the npm workspace root with `workspaces: ["frontend", "backend", "shared"]`
-- [ ] Create `app/shared/` skeleton — `package.json` (name: `@mtc/shared`), `tsconfig.json` (strict, CommonJS, ES2020), and an empty `src/index.ts` barrel export
-- [ ] Scaffold `app/frontend` with `create-next-app` (TypeScript, Tailwind, App Router, import alias `@/*`, no ESLint)
-- [ ] Add `"@mtc/shared": "*"` to `app/frontend/package.json` dependencies
-- [ ] Add `"@mtc/shared": ["../shared/src/index.ts"]` path alias to `app/frontend/tsconfig.json` under `compilerOptions.paths`
-- [ ] Run `npm install` from `app/` root to link workspaces
-- [ ] Remove Next.js boilerplate from `app/frontend/app/globals.css` — keep only the three Tailwind directives
-- [ ] Replace `app/frontend/app/page.tsx` with a minimal "MTC Admin" placeholder component
-- [ ] Verify `http://localhost:3000` renders without errors: `npm run dev` in `app/frontend`
-- [ ] Verify `@mtc/shared` resolves — add a temporary import, run `npx tsc --noEmit` in `app/frontend`, remove the import
+- [x] Create `app/` directory and `app/package.json` as the npm workspace root with `workspaces: ["frontend", "backend", "shared"]`
+- [x] Create `app/shared/` skeleton — `package.json` (name: `@mtc/shared`), `tsconfig.json` (strict, CommonJS, ES2020), and an empty `src/index.ts` barrel export
+- [x] Scaffold `app/frontend` with `create-next-app` (TypeScript, Tailwind, App Router, import alias `@/*`, no ESLint)
+- [x] Add `"@mtc/shared": "*"` to `app/frontend/package.json` dependencies
+- [x] Add `"@mtc/shared": ["../shared/src/index.ts"]` path alias to `app/frontend/tsconfig.json` under `compilerOptions.paths`
+- [x] Run `npm install` from `app/` root to link workspaces
+- [x] Remove Next.js boilerplate from `app/frontend/app/globals.css` — keep only the three Tailwind directives
+- [x] Replace `app/frontend/app/page.tsx` with a minimal "MTC Admin" placeholder component
+- [x] Verify `http://localhost:3000` renders without errors: `npm run dev` in `app/frontend`
+- [x] Verify `@mtc/shared` resolves — add a temporary import, run `npx tsc --noEmit` in `app/frontend`, remove the import
 
 ## How to Test
 
@@ -49,5 +49,5 @@ Expected result: `http://localhost:3000` renders without errors. `@mtc/shared` r
 ## Time
 
 - **In:** 2026-06-20 09:35:45
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 10:06:03
 - **Estimate:** 20 min
