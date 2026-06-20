@@ -10,11 +10,11 @@ Follow the layer-based architecture: `hooks/useDiff.ts` owns the parallel fetch 
 
 ## Execution Steps
 
-- [ ] Create `app/frontend/hooks/useDiff.ts` — `useDiff(idA, idB)` that fetches both tenant configs in parallel via `Promise.all` when both IDs are set and different; resets configs to null when either ID is null or they are equal; returns `{ configA, configB, loading, error }`
-- [ ] Create `app/frontend/components/DiffRow.tsx` — pure UI `<tr>` with label / valueA / valueB cells; applies `bg-yellow-100` when `valueA !== valueB`
-- [ ] Create `app/frontend/components/DiffTable.tsx` — pure UI table accepting `configA`, `configB`, `nameA`, `nameB`; renders a `<DiffRow>` per field grouped into sections: Branding (name, logoUrl, primaryColor, secondaryColor), Approval Rules (threshold, tier count, tier list), Claim Types (one row per platform type: "Enabled (N days)" or "Disabled"), Notifications (one row per event: channels joined), Custom Fields (field count and names)
-- [ ] Create `app/frontend/app/diff/page.tsx` — thin `'use client'` component: uses `useTenantList()` for two dropdown selects, passes selected IDs to `useDiff`, shows a placeholder when IDs are not set or equal, renders `<DiffTable>` when both configs are loaded
-- [ ] Add "Diff" link to `app/frontend/components/Sidebar.tsx`
+- [x] Create `app/frontend/hooks/useDiff.ts` — `useDiff(idA, idB)` that fetches both tenant configs in parallel via `Promise.all` when both IDs are set and different; resets configs to null when either ID is null or they are equal; returns `{ configA, configB, loading, error }`
+- [x] Create `app/frontend/components/DiffRow.tsx` — pure UI `<tr>` with label / valueA / valueB cells; applies `bg-yellow-100` when `valueA !== valueB`
+- [x] Create `app/frontend/components/DiffTable.tsx` — pure UI table accepting `configA`, `configB`, `nameA`, `nameB`; renders a `<DiffRow>` per field grouped into sections: Branding (name, logoUrl, primaryColor, secondaryColor), Approval Rules (threshold, tier count, tier list), Claim Types (one row per platform type: "Enabled (N days)" or "Disabled"), Notifications (one row per event: channels joined), Custom Fields (field count and names)
+- [x] Create `app/frontend/app/diff/page.tsx` — thin `'use client'` component: uses `useTenantList()` for two dropdown selects, passes selected IDs to `useDiff`, shows a placeholder when IDs are not set or equal, renders `<DiffTable>` when both configs are loaded
+- [x] Add "Diff" link to `app/frontend/components/Sidebar.tsx`
 
 ## How to Test
 
@@ -38,6 +38,6 @@ Expected result: `DiffPage` contains no `fetch` calls. `DiffTable` and `DiffRow`
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **In:** 2026-06-20 16:43:00
+- **Out:** 2026-06-20 17:10:00
 - **Estimate:** 40 min
