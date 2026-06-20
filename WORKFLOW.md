@@ -313,6 +313,14 @@ which patterns to follow, and any non-obvious decisions.
 - [ ] Step 2
 - [ ] Step 3
 ...
+```
+
+**Execution step rules:**
+- **One line per step, starting with a verb** — e.g. `- [ ] Run \`npm install\` in \`app/backend/\``, `- [ ] Create \`src/lib/api.ts\` with a typed \`apiFetch\` wrapper`, `- [ ] Add \`@mtc/shared\` as a workspace dependency in \`app/frontend/package.json\``.
+- **No embedded code blocks inside steps.** If the agent needs to know the exact content of a file, describe the intent in the Approach section or a short inline note on the same line. Multi-line JSON, TypeScript, or config snippets do not belong inside a step bullet.
+- **Keep the step list scannable.** An agent or reviewer should be able to read every step in under 30 seconds and know exactly what was done. Verbose steps defeat this purpose.
+
+```markdown
 
 ## How to Test
 
