@@ -16,4 +16,4 @@
 | 12 | [TBD](../docs/AI_Challenge_12.md) | Not started | — |
 | 13 | [TBD](../docs/AI_Challenge_13.md) | Not started | — |
 | 14 | [TBD](../docs/AI_Challenge_14.md) | Not started | — |
-| 15 | [TBD](../docs/AI_Challenge_15.md) | Not started | — |
+| 15 | [Multi-Tenant Configuration Platform](./challenge-15-multi-tenant-config/) | Complete | [challenge-15-multi-tenant-config.vercel.app](https://challenge-15-multi-tenant-config.vercel.app) |
