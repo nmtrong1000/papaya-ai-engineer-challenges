@@ -40,6 +40,6 @@ Expected result: `PreviewPage` contains no `fetch` calls. `ClaimResult` receives
 
 ## Time
 
-- **In:** _(YYYY-MM-DD HH:mm:ss — filled by agent at start)_
+- **In:** 2026-06-20 14:08:55
 - **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
 - **Estimate:** 40 min
