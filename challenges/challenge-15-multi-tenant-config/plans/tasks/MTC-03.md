@@ -8,6 +8,8 @@ All 8 database tables exist in Neon PostgreSQL, created via a Prisma migration, 
 
 Prisma lives in `app/backend`. The schema defines all 8 models matching the ERD: `Tenant`, `Branding`, `ClaimType`, `TenantClaimType`, `TenantNotification`, `ApprovalTier`, `CustomField`, `TenantVersion`. All string IDs use `@default(cuid())`. PostgreSQL `text[]` arrays map to `String[]` in Prisma schema. `Tenant.currentVersionId` is a nullable self-relation FK to `TenantVersion` using a named relation (`"CurrentVersion"`) to distinguish it from the `"AllVersions"` back-relation. Set `DATABASE_URL` in `app/backend/.env` pointing to the Neon connection string.
 
+**Record ID strategy — CUID:** Every model uses `@id @default(cuid())` which produces collision-resistant, URL-safe string IDs (e.g. `cmqluj73400000qhselivujnw`). Prisma generates the ID on the application side before the INSERT, so the ID is available immediately without a DB round-trip. CUIDs are time-sortable by prefix, making them preferable to random UUIDs for paginated list queries.
+
 ## Execution Steps
 
 - [x] Install Prisma and Prisma Client in `app/backend`: `npm install @prisma/client` and `npm install -D prisma`, then run `npx prisma init`
