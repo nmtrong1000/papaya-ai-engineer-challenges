@@ -10,13 +10,13 @@ Add a `VersionRepository` for version-specific Prisma queries (list omits the `c
 
 ## Execution Steps
 
-- [ ] Create `app/backend/src/repositories/versionRepository.ts` — `findByTenantId` (select id/version/schemaVersion/note/createdAt, ordered newest-first, omit config) and `findByTenantAndVersion` (include config)
-- [ ] Create `app/backend/src/lib/migrateConfig.ts` — `migrateConfig(raw: unknown): VersionConfig` that parses through `VersionConfigSchema`; comment marks where future version migrations would be added
-- [ ] Create `app/backend/src/services/versionService.ts` — `listVersions(tenantId)` (verify tenant exists via tenantRepository, return version list) and `rollback(tenantId, targetVersion)` (fetch snapshot, migrateConfig, convert to TenantConfig, call saveTenantConfig with note "Rollback to version N", return `{ newVersion }`)
-- [ ] Create `app/backend/src/controllers/versionController.ts` — `list` and `rollback` handlers; parse `req.params.version` as integer; both wrapped in try/catch → next(err)
-- [ ] Create `app/backend/src/routes/versions.ts` — Router with `mergeParams: true`; GET /:id/versions and POST /:id/rollback/:version
-- [ ] Mount the versions router in `app.ts`: `app.use('/tenants', versionsRouter)`
-- [ ] Smoke test: list versions, update a tenant to create a second version, rollback to version 1, verify 3 versions in history and current config reflects original values
+- [x] Create `app/backend/src/repositories/versionRepository.ts` — `findByTenantId` (select id/version/schemaVersion/note/createdAt, ordered newest-first, omit config) and `findByTenantAndVersion` (include config)
+- [x] Create `app/backend/src/lib/migrateConfig.ts` — `migrateConfig(raw: unknown): VersionConfig` that parses through `VersionConfigSchema`; comment marks where future version migrations would be added
+- [x] Create `app/backend/src/services/versionService.ts` — `listVersions(tenantId)` (verify tenant exists via tenantRepository, return version list) and `rollback(tenantId, targetVersion)` (fetch snapshot, migrateConfig, convert to TenantConfig, call saveTenantConfig with note "Rollback to version N", return `{ newVersion }`)
+- [x] Create `app/backend/src/controllers/versionController.ts` — `list` and `rollback` handlers; parse `req.params.version` as integer; both wrapped in try/catch → next(err)
+- [x] Create `app/backend/src/routes/versions.ts` — Router with `mergeParams: true`; GET /:id/versions and POST /:id/rollback/:version
+- [x] Mount the versions router in `app.ts`: `app.use('/tenants', versionsRouter)`
+- [x] Smoke test: list versions, update a tenant to create a second version, rollback to version 1, verify 3 versions in history and current config reflects original values
 
 ## How to Test
 
@@ -48,5 +48,5 @@ Expected result: Version list grows after each save and rollback. Rollback creat
 ## Time
 
 - **In:** 2026-06-20 11:47:54
-- **Out:** _(YYYY-MM-DD HH:mm:ss — filled by agent at completion)_
+- **Out:** 2026-06-20 11:53:34
 - **Estimate:** 25 min

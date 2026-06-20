@@ -24,6 +24,8 @@ async function saveTenantConfig(tenantId: string, config: TenantConfig, note?: s
 }
 
 export const tenantService = {
+  saveTenantConfig,
+
   listTenants: () => repo.findAll(),
 
   getTenantById: async (id: string) => {

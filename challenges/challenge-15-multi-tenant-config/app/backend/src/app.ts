@@ -3,6 +3,7 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./docs/swaggerConfig";
 import tenantsRouter from "./routes/tenants";
+import versionsRouter from "./routes/versions";
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/tenants", tenantsRouter);
+app.use("/tenants", versionsRouter);
 
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   const status = err.status ?? 500;
